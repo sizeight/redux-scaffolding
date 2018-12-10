@@ -11,11 +11,11 @@ Reusable selectors for an array of objects.
 
 import { createSelector } from 'reselect';
 
-import { reduxBaseElem } from '@vinder/vinderjs';
+import { selectors } from 'redux-scaffolding';
 
 const {
   getStateElems, getFetchingComplete, getElems, getElemToUpdate, getFilterValue,
-} = reduxBaseElem.selectors;
+} = selectors;
 
 
 const nameSpace = 'pages'; // IMPORTANT: The state key
@@ -71,14 +71,14 @@ Number: Returns the id of element being updated.
   * state: The Redux state
 #### Returns
 String: Return the string to filter elements by, e.g. 'blue' or 'dogs' or 'laptos'
-  
+
 ### getSortKey(nameSpace, state)
 #### Arguments
   * nameSpace: The name of the state object
   * state: The Redux state
 #### Returns
 String: Return the key to sort by, e.g. 'title'
-  
+
 ### getSortDirection(nameSpace, state
 #### Arguments
   * nameSpace: The name of the state object

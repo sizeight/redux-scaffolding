@@ -13,9 +13,9 @@ The example also inicates how to add aditional custom actions.
 ```javascript
 // src/state/pages/reducer.js
 
-import { reduxBaseElem } from '@vinder/vinderjs';
+import { reducer } from 'redux-scaffolding';
 
-const { initialState, elems } = reduxBaseElem.reducer;
+const { initialState, elems } = reducer;
 
 
 const nameSpace = 'pages'; // IMPORTANT: The state key

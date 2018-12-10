@@ -8,11 +8,11 @@ Hook up your actions to the reusable reduxBaseElem actions.
 ```javascript
 // src/state/pages/actions.js
 
-import { reduxBaseElem } from '@vinder/vinderjs';
+import { actions } from 'redux-scaffolding';
 
 const {
   fetchElems, setUpdateId, createUpdateElem, deleteElem, setFilterValue, setSortKey,
-} = reduxBaseElem.actions;
+} = actions;
 
 
 const nameSpace = 'pages'; // IMPORTANT: The state key
