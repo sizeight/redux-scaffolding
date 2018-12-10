@@ -1,4 +1,15 @@
 {
   "name": "redux-scaffolding",
-  "version": "1.0.1"
+  "version": "1.0.1",
+  "description": "Reusable Redux actions, reducers and selectors",
+  "license": "MIT",
+  "repository": "sizeight/redux-scaffolding",
+  "main": "lib/redux-scaffolding.min.js",
+  "keywords": [
+    "react",
+    "redux",
+    "django",
+    "reselect"
+  ],
+  "author": "Herman Pretorius (https://github.com/sizeight)"
 }
