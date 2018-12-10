@@ -1,16 +1,16 @@
 /*
  * Return the CSRF token.
  */
-export function getCSRFToken() {
+export const getCSRFToken = () => {
   const CSRFToken = document.cookie.match(/csrftoken=(.*?)(?:$|;)/)[1];
   return CSRFToken;
-}
+};
 
 /*
  * Check the status of the fetch response passed and take appropriate action depending on response
  * status.
  */
-export function checkStatus(response) {
+export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
@@ -49,12 +49,12 @@ export function checkStatus(response) {
     .catch(() => {
       throw error;
     });
-}
+};
 
 /*
  * Return the JSON in a fetch response, throw an error if the response is not valid JSON.
  */
-export function parseJSON(response) {
+export const parseJSON = (response) => {
   return response.json()
     .catch((err) => {
       const error = new Error(response.statusText);
@@ -69,15 +69,15 @@ export function parseJSON(response) {
 
       throw error;
     });
-}
+};
 
 /* TODO: Test
  * Return true if the object is up to date.
  */
-export function upToDate(obj) {
+export const upToDate = (obj) => {
   // TODO: check the age of object is fresh
   return obj && !obj.isFetching && !obj.didInvalidate && obj.lastUpdated !== undefined;
-}
+};
 
 /* TODO: Test
  * Return true if the object is up to date, even if a new object is busy being fetched.
