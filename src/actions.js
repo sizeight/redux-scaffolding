@@ -68,15 +68,25 @@ export const createUpdateElem = (nameSpace, data, id = -1) => {
     ? `${process.env.API_URL}/api/v1/${nameSpace.toLowerCase()}/`
     : `${process.env.API_URL}/api/v1/${nameSpace.toLowerCase()}/${id}/`;
   const method = id === -1 ? 'POST' : 'PATCH';
-  const body = JSON.stringify(data);
+  // const body = JSON.stringify(data);
+
+  const body = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach(val => body.append(key, val));
+    } else {
+      body.append(key, value);
+    }
+  });
 
   return (dispatch) => {
     return fetch(apiURL, {
       method,
       credentials: 'include',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
+        // 'Content-Type': 'multipart/form-data',
         'X-CSRFToken': getCSRFToken(),
       },
       body,
