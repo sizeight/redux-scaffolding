@@ -15,6 +15,7 @@ const mockStore = configureMockStore(middlewares);
 
 
 const nameSpace = 'websites'; // nameSpace used for testing
+const apiPath = '/api/v1/websites/';
 
 describe('actions -> reduxBaseElem (async)', () => {
   afterEach(() => {
@@ -28,7 +29,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { id: 18 },
     ];
     nock(process.env.API_URL)
-      .get(`/api/v1/${nameSpace}/`)
+      .get(apiPath)
       .reply(200, response);
 
     const expectedActions = [
@@ -36,7 +37,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'websites/FETCH_SUCCESS', elems: response },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpace))
+    return store.dispatch(fetchElems(nameSpace, apiPath))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -44,7 +45,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('fetchElems() -> No queryParams, Failure', () => {
     nock(process.env.API_URL)
-      .get(`/api/v1/${nameSpace}/`)
+      .get(apiPath)
       .reply(500, '');
 
     const expectedActions = [
@@ -52,7 +53,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'websites/FETCH_FAILURE' },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpace))
+    return store.dispatch(fetchElems(nameSpace, apiPath))
       .then(() => {
         expect(store.getActions()).toMatchObject(expectedActions);
       });
@@ -61,13 +62,14 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('fetchElems() -> With queryParams, Success', () => {
     const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
     const queryParams = '?page=10&slug=extra_content';
     const response = [
       { id: 15 },
       { id: 18 },
     ];
     nock(process.env.API_URL)
-      .get(`/api/v1/${nameSpaceAlt}/${queryParams}`)
+      .get(`${apiPathAlt}${queryParams}`)
       .reply(200, response);
 
     const expectedActions = [
@@ -75,7 +77,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_SUCCESS', elems: response },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, queryParams))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, queryParams))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -83,9 +85,10 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('fetchElems() -> With queryParams, Failure', () => {
     const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
     const queryParams = '?page=10&slug=extra_content';
     nock(process.env.API_URL)
-      .get(`/api/v1/${nameSpaceAlt}/${queryParams}`)
+      .get(`${apiPathAlt}${queryParams}`)
       .reply(500, '');
 
     const expectedActions = [
@@ -93,7 +96,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_FAILURE' },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, queryParams))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, queryParams))
       .then(() => {
         expect(store.getActions()).toMatchObject(expectedActions);
       });
@@ -102,12 +105,13 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('fetchElems() -> camelCase nameSPace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
+    const apiPathAlt = '/api/v1/subscriptionterms/';
     const response = [
       { id: 15 },
       { id: 18 },
     ];
     nock(process.env.API_URL)
-      .get('/api/v1/subscriptionterms/')
+      .get(apiPathAlt)
       .reply(200, response);
 
     const expectedActions = [
@@ -115,7 +119,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'subscriptionTerms/FETCH_SUCCESS', elems: response },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(camelCaseNameSpace))
+    return store.dispatch(fetchElems(camelCaseNameSpace, apiPathAlt))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -125,7 +129,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> CREATE Success', () => {
     const data = { title: 'New website' };
     nock(process.env.API_URL)
-      .post(`/api/v1/${nameSpace}/`, body => body === '[object FormData]')
+      .post(apiPath, body => body === '[object FormData]')
       .reply(201, { id: 16 });
 
     const expectedActions = [
@@ -136,7 +140,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, data))
+    return store.dispatch(createUpdateElem(nameSpace, apiPath, data))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -145,12 +149,12 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> CREATE Failure', () => {
     const data = { title: 'New website' };
     nock(process.env.API_URL)
-      .post(`/api/v1/${nameSpace}/`, body => body === '[object FormData]')
+      .post(apiPath, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, data))
+    return store.dispatch(createUpdateElem(nameSpace, apiPath, data))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -161,7 +165,7 @@ describe('actions -> reduxBaseElem (async)', () => {
     const id = 15;
     const data = { title: 'Changed title' };
     nock(process.env.API_URL)
-      .patch(`/api/v1/${nameSpace}/${id}/`, body => body === '[object FormData]')
+      .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(200, { id: 15 });
 
     const expectedActions = [
@@ -172,7 +176,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, data, id))
+    return store.dispatch(createUpdateElem(nameSpace, apiPath, data, id))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -182,12 +186,12 @@ describe('actions -> reduxBaseElem (async)', () => {
     const id = 15;
     const data = { title: 'Changed title' };
     nock(process.env.API_URL)
-      .patch(`/api/v1/${nameSpace}/${id}/`, body => body === '[object FormData]')
+      .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, data, 15))
+    return store.dispatch(createUpdateElem(nameSpace, apiPath, data, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -196,6 +200,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('createUpdateElem() -> camelCase nameSPace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
+    const apiPathAlt = '/api/v1/subscriptionterms/';
     const data = { title: 'New term' };
     nock(process.env.API_URL)
       .post('/api/v1/subscriptionterms/', body => body === '[object FormData]')
@@ -209,7 +214,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(camelCaseNameSpace, data))
+    return store.dispatch(createUpdateElem(camelCaseNameSpace, apiPathAlt, data))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -218,7 +223,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('deleteElem() -> DELETE Success', () => {
     const id = 15;
     nock(process.env.API_URL)
-      .delete(`/api/v1/${nameSpace}/${id}/`)
+      .delete(`${apiPath}${id}/`)
       .reply(204);
 
     const expectedActions = [
@@ -229,7 +234,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(deleteElem(nameSpace, 15))
+    return store.dispatch(deleteElem(nameSpace, apiPath, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -238,12 +243,12 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('deleteElem() -> DELETE Failures', () => {
     const id = 15;
     nock(process.env.API_URL)
-      .delete(`/api/v1/${nameSpace}/${id}/`)
+      .delete(`${apiPath}${id}/`)
       .reply(500, {});
 
     const expectedActions = [];
     const store = mockStore({});
-    return store.dispatch(deleteElem(nameSpace, 15))
+    return store.dispatch(deleteElem(nameSpace, apiPath, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -252,9 +257,10 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('deleteElem() -> camelCase nameSPace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
+    const apiPathAlt = '/api/v1/subscriptionterms/';
     const id = 15;
     nock(process.env.API_URL)
-      .delete(`/api/v1/subscriptionterms/${id}/`)
+      .delete(`${apiPathAlt}${id}/`)
       .reply(204);
 
     const expectedActions = [
@@ -265,7 +271,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(deleteElem(camelCaseNameSpace, 15))
+    return store.dispatch(deleteElem(camelCaseNameSpace, apiPathAlt, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

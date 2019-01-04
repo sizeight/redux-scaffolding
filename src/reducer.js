@@ -23,12 +23,13 @@ export const elems = (nameSpace, state = initialState, action) => {
         isFetching: true,
       });
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
-      // if paginated response, the response json is different
       let responseElems = [];
       let pagination = {};
       if (Array.isArray(action.elems)) {
+        // Response is an array of objects
         responseElems = action.elems.slice();
       } else if (action.elems.results) {
+        // Response is paginated
         responseElems = action.elems.results.slice();
         pagination = {
           count: action.elems.count,
@@ -37,6 +38,9 @@ export const elems = (nameSpace, state = initialState, action) => {
           next: action.elems.next,
           previous: action.elems.previous,
         };
+      } else {
+        // Response is an individual object
+        responseElems = [action.elems];
       }
 
       return Object.assign({}, state, {

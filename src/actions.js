@@ -21,10 +21,11 @@ export const fetchFailure = nameSpace => ({
 /*
  * Fetch an array of elements.
  *
+ * apiURL = e.g. http://www.example.com/api/v1/websites/
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
-export const fetchElems = (nameSpace, queryParams = '') => {
-  const apiURL = `${process.env.API_URL}/api/v1/${nameSpace.toLowerCase()}/${queryParams}`;
+export const fetchElems = (nameSpace, apiPath, queryParams = '') => {
+  const apiURL = `${process.env.API_URL}${apiPath}${queryParams}`;
 
   return (dispatch) => {
     dispatch(fetchBusy(nameSpace));
@@ -63,10 +64,10 @@ export const updateSuccess = (nameSpace, id, jsonResponse) => ({
   elem: jsonResponse,
 });
 
-export const createUpdateElem = (nameSpace, data, id = -1) => {
+export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
   const apiURL = id === -1
-    ? `${process.env.API_URL}/api/v1/${nameSpace.toLowerCase()}/`
-    : `${process.env.API_URL}/api/v1/${nameSpace.toLowerCase()}/${id}/`;
+    ? `${process.env.API_URL}${apiPath}`
+    : `${process.env.API_URL}${apiPath}${id}/`;
   const method = id === -1 ? 'POST' : 'PATCH';
   // const body = JSON.stringify(data);
 
@@ -105,8 +106,8 @@ export const createUpdateElem = (nameSpace, data, id = -1) => {
   };
 };
 
-export const deleteElem = (nameSpace, id) => {
-  const apiURL = `${process.env.API_URL}/api/v1/${nameSpace.toLowerCase()}/${id}/`;
+export const deleteElem = (nameSpace, apiPath, id) => {
+  const apiURL = `${process.env.API_URL}${apiPath}${id}/`;
 
   return (dispatch) => {
     return fetch(apiURL, {
