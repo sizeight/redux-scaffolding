@@ -125,7 +125,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> CREATE Success', () => {
     const data = { title: 'New website' };
     nock(process.env.API_URL)
-      .post(`/api/v1/${nameSpace}/`, data)
+      .post(`/api/v1/${nameSpace}/`, body => body === '[object FormData]')
       .reply(201, { id: 16 });
 
     const expectedActions = [
@@ -145,7 +145,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> CREATE Failure', () => {
     const data = { title: 'New website' };
     nock(process.env.API_URL)
-      .post(`/api/v1/${nameSpace}/`, data)
+      .post(`/api/v1/${nameSpace}/`, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
@@ -161,7 +161,7 @@ describe('actions -> reduxBaseElem (async)', () => {
     const id = 15;
     const data = { title: 'Changed title' };
     nock(process.env.API_URL)
-      .patch(`/api/v1/${nameSpace}/${id}/`, data)
+      .patch(`/api/v1/${nameSpace}/${id}/`, body => body === '[object FormData]')
       .reply(200, { id: 15 });
 
     const expectedActions = [
@@ -182,7 +182,7 @@ describe('actions -> reduxBaseElem (async)', () => {
     const id = 15;
     const data = { title: 'Changed title' };
     nock(process.env.API_URL)
-      .patch(`/api/v1/${nameSpace}/${id}/`, data)
+      .patch(`/api/v1/${nameSpace}/${id}/`, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
@@ -198,7 +198,7 @@ describe('actions -> reduxBaseElem (async)', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const data = { title: 'New term' };
     nock(process.env.API_URL)
-      .post('/api/v1/subscriptionterms/', data)
+      .post('/api/v1/subscriptionterms/', body => body === '[object FormData]')
       .reply(201, { id: 16 });
 
     const expectedActions = [
@@ -214,7 +214,6 @@ describe('actions -> reduxBaseElem (async)', () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });
-
 
   it('deleteElem() -> DELETE Success', () => {
     const id = 15;

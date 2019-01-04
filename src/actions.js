@@ -70,7 +70,7 @@ export const createUpdateElem = (nameSpace, data, id = -1) => {
   const method = id === -1 ? 'POST' : 'PATCH';
   // const body = JSON.stringify(data);
 
-  const body = new FormData();
+  const body = new window.FormData();
   Object.entries(data).forEach(([key, value]) => {
     if (Array.isArray(value)) {
       value.forEach(val => body.append(key, val));
