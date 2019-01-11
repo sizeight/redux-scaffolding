@@ -129,7 +129,8 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> CREATE Success', () => {
     const data = { title: 'New website' };
     nock(process.env.API_URL)
-      .post(apiPath, body => body === '[object FormData]')
+      .post(apiPath, data)
+      // .post(apiPath, body => body === '[object FormData]')
       .reply(201, { id: 16 });
 
     const expectedActions = [
@@ -149,7 +150,8 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> CREATE Failure', () => {
     const data = { title: 'New website' };
     nock(process.env.API_URL)
-      .post(apiPath, body => body === '[object FormData]')
+      .post(apiPath, data)
+      // .post(apiPath, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
@@ -165,7 +167,8 @@ describe('actions -> reduxBaseElem (async)', () => {
     const id = 15;
     const data = { title: 'Changed title' };
     nock(process.env.API_URL)
-      .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
+      .patch(`${apiPath}${id}/`, data)
+      // .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(200, { id: 15 });
 
     const expectedActions = [
@@ -186,7 +189,8 @@ describe('actions -> reduxBaseElem (async)', () => {
     const id = 15;
     const data = { title: 'Changed title' };
     nock(process.env.API_URL)
-      .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
+      .patch(`${apiPath}${id}/`, data)
+      // .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
@@ -198,23 +202,22 @@ describe('actions -> reduxBaseElem (async)', () => {
   });
 
 
-  it('createUpdateElem() -> camelCase nameSPace should be changes to lowercase in API call', () => {
-    const camelCaseNameSpace = 'subscriptionTerms';
-    const apiPathAlt = '/api/v1/subscriptionterms/';
-    const data = { title: 'New term' };
+  it('createUpdateElem() -> File in data should be sent as multipart/form-data', () => {
+    const id = 15;
+    const data = { title: 'New term', file: { name: 'newfile.jpg' } };
     nock(process.env.API_URL)
-      .post('/api/v1/subscriptionterms/', body => body === '[object FormData]')
-      .reply(201, { id: 16 });
+      .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
+      .reply(201, { id: 15 });
 
     const expectedActions = [
       {
-        type: 'subscriptionTerms/UPDATE_SUCCESS',
-        id: -1,
-        elem: { id: 16 },
+        type: 'websites/UPDATE_SUCCESS',
+        id: 15,
+        elem: { id: 15 },
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(camelCaseNameSpace, apiPathAlt, data))
+    return store.dispatch(createUpdateElem(nameSpace, apiPath, data, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

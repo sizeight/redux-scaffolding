@@ -69,27 +69,41 @@ export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
     ? `${process.env.API_URL}${apiPath}`
     : `${process.env.API_URL}${apiPath}${id}/`;
   const method = id === -1 ? 'POST' : 'PATCH';
-  // const body = JSON.stringify(data);
 
-  const body = new window.FormData();
-  Object.entries(data).forEach(([key, value]) => {
-    if (Array.isArray(value)) {
-      value.forEach(val => body.append(key, val));
-    } else {
-      body.append(key, value);
+  // Do we have a file as payload? If so send multipart/form-data
+  let isMultipart = false;
+  Object.entries(data).forEach(([key, value]) => { // eslint-disable-line
+    if (!isMultipart) {
+      isMultipart = value ? typeof value.name === 'string' : false;
     }
   });
+
+  let body;
+  let headers = {
+    'X-CSRFToken': getCSRFToken(),
+  };
+  if (!isMultipart) {
+    body = JSON.stringify(data);
+    headers = Object.assign({}, headers, {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
+  } else {
+    body = new window.FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach(val => body.append(key, val));
+      } else {
+        body.append(key, value);
+      }
+    });
+  }
 
   return (dispatch) => {
     return fetch(apiURL, {
       method,
       credentials: 'include',
-      headers: {
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-        // 'Content-Type': 'multipart/form-data',
-        'X-CSRFToken': getCSRFToken(),
-      },
+      headers,
       body,
     })
       .then(checkStatus)
