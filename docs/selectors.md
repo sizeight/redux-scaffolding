@@ -15,6 +15,7 @@ import { selectors } from 'redux-scaffolding';
 
 const {
   getStateElems, getFetchingComplete, getElems, getElemToUpdate, getFilterValue,
+  getTotalElemCount, getFilteredElemCount, getSortKey, getSortDirection,
 } = selectors;
 
 
@@ -22,6 +23,8 @@ const nameSpace = 'pages'; // IMPORTANT: The state key
 
 const getStatePages = state => getStateElems(nameSpace, state); // Pass this state into the selector functions below
 export const getPageFilterValue = state => getFilterValue(nameSpace, state);
+export const getPageSortKey = state = getSortKey(nameSpace, state);
+export getPageSortDirection = state => getSortDirection(nameSpace, state);
 
 export const getFetchingPagesComplete = createSelector(
   [getStatePages],
@@ -35,6 +38,20 @@ export const getPages = createSelector(
   (statePages) => {
     return getElems(statePages);
   },
+);
+
+export const getTotalPageCount = createSelector(
+  [getStatePages],
+  (statePages) => {
+    return getTotalElemCount(statePages);
+  },  
+);
+
+export const getFilteredPageCount = createSelector(
+  [getStatePages],
+  (statePages) => {
+    return getFilteredElemCount(statePages);
+  },  
 );
 
 export const getPageToUpdate = createSelector(
