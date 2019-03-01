@@ -93,3 +93,16 @@ export const getElemToUpdate = (stateElems) => {
   }
   return elemToUpdate || {};
 };
+
+export const getTotalElemCount = (stateElems) => {
+  let count = -1;
+  if (upToDate(stateElems)) {
+    count = stateElems.elems.length;
+  }
+  return count;
+};
+
+export const getFilteredElemCount = (stateElems) => {
+  const elems = getElems(stateElems);
+  return elems.length;
+};

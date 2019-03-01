@@ -3,7 +3,7 @@ import rewire from 'rewire';
 
 import {
   getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getElems, getElemToUpdate,
-  getSortKey, getSortDirection, getPagination,
+  getSortKey, getSortDirection, getPagination, getTotalElemCount, getFilteredElemCount,
 } from './selectors';
 
 // Selector functions not exported need to be rewired to test
@@ -602,5 +602,54 @@ describe('selectors -> reduxBaseElem', () => {
     };
     const derivedData = {};
     expect(getElemToUpdate(stateElems)).toEqual(derivedData);
+  });
+
+
+  it('getTotalElemCount() -> How many elements are there in total?', () => {
+    const stateElems = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+      elems: [
+        {
+          id: 1,
+        },
+        {
+          id: 2,
+        },
+      ],
+      filterValue: '',
+      sortKey: null,
+      sortDirection: null,
+    };
+    const derivedData = 2;
+    expect(getTotalElemCount(stateElems)).toEqual(derivedData);
+  });
+
+  it('getFilteredElemCount() -> How many filtered elements are there?', () => {
+    const stateElems = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+      elems: [
+        {
+          id: 1,
+          filterString: 'jerry seinfeld',
+        },
+        {
+          id: 2,
+          filterString: 'cosmo kramer',
+        },
+        {
+          id: 3,
+          filterString: 'george costanza',
+        },
+      ],
+      filterValue: 'Cos',
+      sortKey: null,
+      sortDirection: null,
+    };
+    const derivedData = 2;
+    expect(getFilteredElemCount(stateElems)).toEqual(derivedData);
   });
 });
