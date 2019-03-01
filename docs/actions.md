@@ -16,6 +16,7 @@ const {
 
 
 const nameSpace = 'pages'; // IMPORTANT: The state key
+const apiPath = '/api/v1/pages/'; // IMPORTANT: The API path
 
 // FETCHING
 /*
@@ -25,21 +26,21 @@ const nameSpace = 'pages'; // IMPORTANT: The state key
  */
 export const fetchPages = (parentId) => {
   const queryParams = `?parent=${parentId}`;
-  return fetchElems(nameSpace, queryParams);
+  return fetchElems(nameSpace, apiPath, queryParams);
 };
 
 
 // CREATE / UPDATE / DELETE
 export const setPageUpdateId = (id) => {
-  return setUpdateId(nameSpace, id);
+  return setUpdateId(nameSpace, apiPath, id);
 };
 
 export const createUpdatePage = (data, id) => {
-  return createUpdateElem(nameSpace, data, id);
+  return createUpdateElem(nameSpace, apiPath, data, id);
 };
 
 export const deletePage = (id) => {
-  return deleteElem(nameSpace, id);
+  return deleteElem(nameSpace, apiPath, id);
 };
 
 // FILTERING
