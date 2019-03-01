@@ -17,6 +17,32 @@ import { reducer } from 'redux-scaffolding';
 
 const { initialState, elems } = reducer;
 
+/*
+initialState = {
+  isFetching: false,
+  didInvalidate: false,
+  lastUpdated: undefined,
+  elems: [], 
+  filterOnFields: [], // Override this as below with relevant filter fields
+
+  updateId: -1, // id for which to show update form
+  filterValue: '',
+  sortKey: null,
+  sortDirection: null,
+
+  pagination: {}, // If pagination is relevant
+};
+
+If pagination is used then the pagination field will be populated as follows:
+e.g.
+  pagination: {
+    count: 3, // Number of pages
+    page_size: 10, // Number of elements on page
+    page: 2, // Active page
+    next: 3, // Next page number
+    previous: 1, // Previous page number,
+  }  
+*/
 
 const nameSpace = 'pages'; // IMPORTANT: The state key
 
@@ -27,7 +53,7 @@ const initialWebsitesState = Object.assign({}, initialState, {
   extra1: 'extra state 2',
 });
 
-const websites = (state = initialWebsitesState, action) => {
+const pages = (state = initialWebsitesState, action) => {
   switch (action.type) {
     case 'website/CUSTOM_ACTION':
       // Example of a custom action
@@ -37,6 +63,6 @@ const websites = (state = initialWebsitesState, action) => {
   }
 };
 
-export default websites;
+export default pages;
 
 ```
