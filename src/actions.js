@@ -64,11 +64,17 @@ export const updateSuccess = (nameSpace, id, jsonResponse) => ({
   elem: jsonResponse,
 });
 
+export const setUpdateBusyId = (nameSpace, id, busy) => ({
+  type: `${nameSpace}${t.SET_UPDATE_BUSY_ID}`,
+  id,
+  busy,
+});
+
 export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
   const apiURL = id === -1
     ? `${process.env.API_URL}${apiPath}`
     : `${process.env.API_URL}${apiPath}${id}/`;
-  const method = id === -1 ? 'POST' : 'PATCH';
+  const isUpdate = id > -1;
 
   // Do we have a file as payload? If so send multipart/form-data
   let isMultipart = false;
@@ -100,8 +106,11 @@ export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
   }
 
   return (dispatch) => {
+    if (isUpdate) {
+      dispatch(setUpdateBusyId(nameSpace, id, true));
+    }
     return fetch(apiURL, {
-      method,
+      method: isUpdate ? 'PATCH' : 'POST',
       credentials: 'include',
       headers,
       body,
@@ -111,19 +120,32 @@ export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
       .then(
         (jsonResponse) => {
           dispatch(updateSuccess(nameSpace, id, jsonResponse));
+          if (isUpdate) {
+            dispatch(setUpdateBusyId(nameSpace, id, false));
+          }
           return 'Success';
         },
         (error) => {
+          if (isUpdate) {
+            dispatch(setUpdateBusyId(nameSpace, id, false));
+          }
           return error.errorLogInfo.jsonResponse;
         },
       );
   };
 };
 
+export const setDeleteBusyId = (nameSpace, id, busy) => ({
+  type: `${nameSpace}${t.SET_DELETE_BUSY_ID}`,
+  id,
+  busy,
+});
+
 export const deleteElem = (nameSpace, apiPath, id) => {
   const apiURL = `${process.env.API_URL}${apiPath}${id}/`;
 
   return (dispatch) => {
+    dispatch(setDeleteBusyId(nameSpace, id, true));
     return fetch(apiURL, {
       method: 'DELETE',
       credentials: 'include',
@@ -137,9 +159,11 @@ export const deleteElem = (nameSpace, apiPath, id) => {
       .then(
         () => {
           dispatch(updateSuccess(nameSpace, id));
+          dispatch(setDeleteBusyId(nameSpace, id, false));
           return 'Success';
         },
         (error) => {
+          dispatch(setDeleteBusyId(nameSpace, id, false));
           return error.errorLogInfo.jsonResponse;
         },
       );

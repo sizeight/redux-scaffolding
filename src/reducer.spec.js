@@ -21,6 +21,8 @@ describe('reducer -> reduxBaseElem', () => {
       sortKey: null,
       sortDirection: null,
       pagination: {},
+      updateBusyIds: [],
+      deleteBusyIds: [],
     };
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
@@ -295,6 +297,70 @@ describe('reducer -> reduxBaseElem', () => {
           id: 14,
         },
       ],
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+
+  it(`should handle ${nameSpace}/SET_UPDATE_BUSY_ID -> true`, () => {
+    const action = {
+      type: 'websites/SET_UPDATE_BUSY_ID',
+      id: 15,
+      busy: true,
+    };
+    const stateBefore = {
+      updateBusyIds: [9, 8],
+    };
+    const stateAfter = {
+      updateBusyIds: [9, 8, 15],
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+  it(`should handle ${nameSpace}/SET_UPDATE_BUSY_ID -> false`, () => {
+    const action = {
+      type: 'websites/SET_UPDATE_BUSY_ID',
+      id: 15,
+      busy: false,
+    };
+    const stateBefore = {
+      updateBusyIds: [9, 8, 15],
+    };
+    const stateAfter = {
+      updateBusyIds: [9, 8],
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+
+  it(`should handle ${nameSpace}/SET_DELETE_BUSY_ID -> true`, () => {
+    const action = {
+      type: 'websites/SET_DELETE_BUSY_ID',
+      id: 15,
+      busy: true,
+    };
+    const stateBefore = {
+      deleteBusyIds: [9, 8],
+    };
+    const stateAfter = {
+      deleteBusyIds: [9, 8, 15],
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+  it(`should handle ${nameSpace}/SET_DELETE_BUSY_ID -> false`, () => {
+    const action = {
+      type: 'websites/SET_DELETE_BUSY_ID',
+      id: 15,
+      busy: false,
+    };
+    const stateBefore = {
+      deleteBusyIds: [9, 8, 15],
+    };
+    const stateAfter = {
+      deleteBusyIds: [9, 8],
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);

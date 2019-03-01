@@ -6,7 +6,9 @@ import nock from 'nock';
 
 import {
   fetchBusy, fetchSuccess, fetchFailure, fetchElems,
-  setUpdateId, updateSuccess, createUpdateElem, deleteElem, setFilterValue, setSortKey,
+  setUpdateId, updateSuccess, createUpdateElem, setUpdateBusyId,
+  deleteElem, setDeleteBusyId,
+  setFilterValue, setSortKey,
 } from './actions';
 
 
@@ -173,9 +175,19 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       {
+        type: 'websites/SET_UPDATE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
         type: 'websites/UPDATE_SUCCESS',
         id: 15,
         elem: { id: 15 },
+      },
+      {
+        type: 'websites/SET_UPDATE_BUSY_ID',
+        id: 15,
+        busy: false,
       },
     ];
     const store = mockStore({});
@@ -193,7 +205,18 @@ describe('actions -> reduxBaseElem (async)', () => {
       // .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(500, {});
 
-    const expectedActions = [];
+    const expectedActions = [
+      {
+        type: 'websites/SET_UPDATE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
+        type: 'websites/SET_UPDATE_BUSY_ID',
+        id: 15,
+        busy: false,
+      },
+    ];
     const store = mockStore({});
     return store.dispatch(createUpdateElem(nameSpace, apiPath, data, 15))
       .then(() => {
@@ -211,9 +234,19 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       {
+        type: 'websites/SET_UPDATE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
         type: 'websites/UPDATE_SUCCESS',
         id: 15,
         elem: { id: 15 },
+      },
+      {
+        type: 'websites/SET_UPDATE_BUSY_ID',
+        id: 15,
+        busy: false,
       },
     ];
     const store = mockStore({});
@@ -231,9 +264,19 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
         type: 'websites/UPDATE_SUCCESS',
         id: 15,
         elem: undefined,
+      },
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: false,
       },
     ];
     const store = mockStore({});
@@ -249,7 +292,18 @@ describe('actions -> reduxBaseElem (async)', () => {
       .delete(`${apiPath}${id}/`)
       .reply(500, {});
 
-    const expectedActions = [];
+    const expectedActions = [
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: false,
+      },
+    ];
     const store = mockStore({});
     return store.dispatch(deleteElem(nameSpace, apiPath, 15))
       .then(() => {
@@ -268,9 +322,19 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       {
+        type: 'subscriptionTerms/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
         type: 'subscriptionTerms/UPDATE_SUCCESS',
         id: 15,
         elem: undefined,
+      },
+      {
+        type: 'subscriptionTerms/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: false,
       },
     ];
     const store = mockStore({});
@@ -324,6 +388,28 @@ describe('actions -> reduxBaseElem', () => {
     expect(setUpdateId(nameSpace)).toEqual(expectedAction);
   });
 
+  it('setUpdateBusyId() -> true', () => {
+    const id = 15;
+    const busy = true;
+    const expectedAction = {
+      type: 'websites/SET_UPDATE_BUSY_ID',
+      id,
+      busy,
+    };
+    expect(setUpdateBusyId(nameSpace, id, busy)).toEqual(expectedAction);
+  });
+
+  it('setUpdateBusyId() -> false', () => {
+    const id = 15;
+    const busy = false;
+    const expectedAction = {
+      type: 'websites/SET_UPDATE_BUSY_ID',
+      id,
+      busy,
+    };
+    expect(setUpdateBusyId(nameSpace, id, busy)).toEqual(expectedAction);
+  });
+
   it('updateSuccess() -> CREATE', () => {
     const id = -1;
     const elem = { id: 16 };
@@ -354,6 +440,29 @@ describe('actions -> reduxBaseElem', () => {
       elem: undefined,
     };
     expect(updateSuccess(nameSpace, id)).toEqual(expectedAction);
+  });
+
+
+  it('setDeleteBusyId() -> true', () => {
+    const id = 15;
+    const busy = true;
+    const expectedAction = {
+      type: 'websites/SET_DELETE_BUSY_ID',
+      id,
+      busy,
+    };
+    expect(setDeleteBusyId(nameSpace, id, busy)).toEqual(expectedAction);
+  });
+
+  it('setDeleteBusyId() -> false', () => {
+    const id = 15;
+    const busy = false;
+    const expectedAction = {
+      type: 'websites/SET_DELETE_BUSY_ID',
+      id,
+      busy,
+    };
+    expect(setDeleteBusyId(nameSpace, id, busy)).toEqual(expectedAction);
   });
 
 

@@ -3,7 +3,8 @@ import rewire from 'rewire';
 
 import {
   getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getElems, getElemToUpdate,
-  getSortKey, getSortDirection, getPagination, getTotalElemCount, getFilteredElemCount,
+  getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection, getPagination,
+  getTotalElemCount, getFilteredElemCount,
 } from './selectors';
 
 // Selector functions not exported need to be rewired to test
@@ -57,6 +58,52 @@ describe('selectors -> reduxBaseElem', () => {
     };
     const derivedData = 2;
     expect(getUpdateElemId(nameSpace, state)).toEqual(derivedData);
+  });
+
+  it('getUpdateBusyIds()', () => {
+    const state = {
+      posts: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        posts: [],
+        updateBusyIds: [6],
+        deleteBusyIds: [],
+      },
+      websites: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        websites: [],
+        updateBusyIds: [],
+        deleteBusyIds: [],
+      },
+    };
+    const derivedData = [6];
+    expect(getUpdateBusyIds(nameSpace, state)).toEqual(derivedData);
+  });
+
+  it('getDeleteBusyIds()', () => {
+    const state = {
+      posts: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        posts: [],
+        updateBusyIds: [6],
+        deleteBusyIds: [],
+      },
+      websites: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        websites: [],
+        updateBusyIds: [],
+        deleteBusyIds: [],
+      },
+    };
+    const derivedData = [];
+    expect(getDeleteBusyIds(nameSpace, state)).toEqual(derivedData);
   });
 
   it('getFilterValue()', () => {

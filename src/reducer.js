@@ -13,6 +13,9 @@ export const initialState = {
   sortDirection: null,
 
   pagination: {},
+
+  updateBusyIds: [], // These elemId's are busy being updated
+  deleteBusyIds: [], // These elemId's are busy being deleted
 };
 
 export const elems = (nameSpace, state = initialState, action) => {
@@ -56,7 +59,6 @@ export const elems = (nameSpace, state = initialState, action) => {
         pagination,
       });
     }
-
     case `${nameSpace}${t.FETCH_FAILURE}`:
       return Object.assign({}, state, {
         isFetching: false,
@@ -95,6 +97,35 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...state.elems.slice(0, idx),
           action.elem,
           ...state.elems.slice(idx + 1),
+        ],
+      });
+    }
+
+    case `${nameSpace}${t.SET_UPDATE_BUSY_ID}`: {
+      const idx = state.updateBusyIds.findIndex(x => x === action.id);
+
+      return Object.assign({}, state, {
+        ...state,
+        updateBusyIds: action.busy ? [
+          ...state.updateBusyIds,
+          action.id,
+        ] : [
+          ...state.updateBusyIds.slice(0, idx),
+          ...state.updateBusyIds.slice(idx + 1),
+        ],
+      });
+    }
+    case `${nameSpace}${t.SET_DELETE_BUSY_ID}`: {
+      const idx = state.deleteBusyIds.findIndex(x => x === action.id);
+
+      return Object.assign({}, state, {
+        ...state,
+        deleteBusyIds: action.busy ? [
+          ...state.deleteBusyIds,
+          action.id,
+        ] : [
+          ...state.deleteBusyIds.slice(0, idx),
+          ...state.deleteBusyIds.slice(idx + 1),
         ],
       });
     }

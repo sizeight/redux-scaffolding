@@ -6,6 +6,8 @@ import { upToDate } from './utils';
 
 export const getStateElems = (nameSpace, state) => state[nameSpace];
 export const getUpdateElemId = (nameSpace, state) => state[nameSpace].updateId;
+export const getUpdateBusyIds = (nameSpace, state) => state[nameSpace].updateBusyIds;
+export const getDeleteBusyIds = (nameSpace, state) => state[nameSpace].deleteBusyIds;
 export const getFilterValue = (nameSpace, state) => state[nameSpace].filterValue;
 export const getSortKey = (nameSpace, state) => state[nameSpace].sortKey;
 export const getSortDirection = (nameSpace, state) => state[nameSpace].sortDirection;
