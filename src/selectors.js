@@ -36,6 +36,13 @@ const getSortedElems = (elems, sortKey, sortDirection) => {
   let sortedElems = elems.slice();
   if (sortKey !== null && sortDirection !== null) {
     sortedElems = sortedElems.sort((a, b) => {
+      const aHasKey = Object.prototype.hasOwnProperty.call(a, sortKey);
+      const bHasKey = Object.prototype.hasOwnProperty.call(b, sortKey);
+
+      if (!aHasKey || !bHasKey) {
+        throw new Error(`Object has no key ${sortKey}`);
+      }
+
       let valA = a[sortKey]; // ignore upper and lowercase
       let valB = b[sortKey]; // ignore upper and lowercase
 

@@ -328,6 +328,27 @@ describe('selectors -> reduxBaseElem', () => {
     expect(getSortedElems(elems, sortKey, sortDirection)).toEqual(derivedData);
   });
 
+  it('getSortedElems() -> Invalid sortKey provided', () => {
+    const sortKey = 'wrongKey';
+    const sortDirection = 'asc';
+    const elems = [
+      {
+        title: 'Charlie',
+      },
+      {
+        title: 'Bravo',
+      },
+      {
+        title: 'Delta',
+      },
+      {
+        title: 'Alpha',
+      },
+    ];
+    expect(() => getSortedElems(elems, sortKey, sortDirection))
+      .toThrow(new Error('Object has no key wrongKey'));
+  });
+
   it('getSortedElems() -> Ascending strings', () => {
     const sortKey = 'title';
     const sortDirection = 'asc';
