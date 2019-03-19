@@ -202,9 +202,10 @@ describe('reducer -> reduxBaseElem', () => {
     const action = {
       type: 'websites/UPDATE_SUCCESS',
       id: -1,
-      elem: { id: 16, title: 'New' },
+      elem: { id: 16, first_name: 'Jerry', last_name: 'Seinfeld' },
     };
     const stateBefore = {
+      filterOnFields: ['first_name', 'last_name'],
       elems: [
         {
           id: 15,
@@ -215,10 +216,13 @@ describe('reducer -> reduxBaseElem', () => {
       ],
     };
     const stateAfter = {
+      filterOnFields: ['first_name', 'last_name'],
       elems: [
         {
           id: 16,
-          title: 'New',
+          first_name: 'Jerry',
+          last_name: 'Seinfeld',
+          filterString: 'jerry seinfeld',
         },
         {
           id: 15,
@@ -236,15 +240,19 @@ describe('reducer -> reduxBaseElem', () => {
     const action = {
       type: 'websites/UPDATE_SUCCESS',
       id: 15,
-      elem: { id: 15, title: 'Changed' },
+      elem: { id: 15, first_name: 'Cosmo', last_name: 'Kramer' },
     };
     const stateBefore = {
+      filterOnFields: ['first_name', 'last_name'],
       elems: [
         {
           id: 16,
         },
         {
           id: 15,
+          first_name: 'Jerry',
+          last_name: 'Seinfeld',
+          filterString: 'jerry seinfeld',
         },
         {
           id: 14,
@@ -252,13 +260,16 @@ describe('reducer -> reduxBaseElem', () => {
       ],
     };
     const stateAfter = {
+      filterOnFields: ['first_name', 'last_name'],
       elems: [
         {
           id: 16,
         },
         {
           id: 15,
-          title: 'Changed',
+          first_name: 'Cosmo',
+          last_name: 'Kramer',
+          filterString: 'cosmo kramer',
         },
         {
           id: 14,

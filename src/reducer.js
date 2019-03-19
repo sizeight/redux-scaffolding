@@ -18,6 +18,10 @@ export const initialState = {
   deleteBusyIds: [], // These elemId's are busy being deleted
 };
 
+function getFilterString(filterOnFields, elem) {
+  return filterOnFields.map(x => elem[x].toLowerCase()).join(' ');
+}
+
 export const elems = (nameSpace, state = initialState, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_BUSY}`:
@@ -51,9 +55,8 @@ export const elems = (nameSpace, state = initialState, action) => {
         didInvalidate: false,
         lastUpdated: Date.now(),
         elems: responseElems.map((elem) => {
-          const filterString = state.filterOnFields.map(x => elem[x].toLowerCase()).join(' ');
           return Object.assign({}, elem, {
-            filterString,
+            filterString: getFilterString(state.filterOnFields, elem),
           });
         }),
         pagination,
@@ -76,7 +79,9 @@ export const elems = (nameSpace, state = initialState, action) => {
       if (action.id === -1) {
         return Object.assign({}, state, {
           elems: [
-            action.elem,
+            Object.assign({}, action.elem, {
+              filterString: getFilterString(state.filterOnFields, action.elem),
+            }),
             ...state.elems,
           ],
         });
@@ -95,7 +100,9 @@ export const elems = (nameSpace, state = initialState, action) => {
       return Object.assign({}, state, {
         elems: [
           ...state.elems.slice(0, idx),
-          action.elem,
+          Object.assign({}, action.elem, {
+            filterString: getFilterString(state.filterOnFields, action.elem),
+          }),
           ...state.elems.slice(idx + 1),
         ],
       });
