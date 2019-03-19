@@ -89,6 +89,32 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> Invalid filterOnFields provided`, () => {
+    const action = {
+      type: 'websites/FETCH_SUCCESS',
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+        },
+      ],
+    };
+    const stateBefore = {
+      isFetching: true,
+      didInvalidate: true,
+      lastUpdated: undefined,
+      filterOnFields: ['sub_title'],
+      pagination: {},
+    };
+    deepFreeze(stateBefore);
+    expect(() => reducer(nameSpace, stateBefore, action))
+      .toThrow(new Error("Object has no key 'sub_title'"));
+  });
+
   it(`should handle ${nameSpace}/FETCH_SUCCESS -> with pagination`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',

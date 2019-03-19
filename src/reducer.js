@@ -19,7 +19,14 @@ export const initialState = {
 };
 
 function getFilterString(filterOnFields, elem) {
-  return filterOnFields.map(x => elem[x].toLowerCase()).join(' ');
+  return filterOnFields.map((filterKey) => {
+    const hasKey = Object.prototype.hasOwnProperty.call(elem, filterKey);
+    if (!hasKey) {
+      throw new Error(`Object has no key '${filterKey}'`);
+    }
+
+    return elem[filterKey].toLowerCase();
+  }).join(' ');
 }
 
 export const elems = (nameSpace, state = initialState, action) => {
