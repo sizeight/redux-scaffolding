@@ -56,6 +56,7 @@ describe('reducer -> reduxBaseElem', () => {
           sub_title: 'Delta',
         },
       ],
+      append: false,
     };
     const stateBefore = {
       isFetching: true,
@@ -102,6 +103,7 @@ describe('reducer -> reduxBaseElem', () => {
           title: 'Bravo',
         },
       ],
+      append: false,
     };
     const stateBefore = {
       isFetching: true,
@@ -137,6 +139,7 @@ describe('reducer -> reduxBaseElem', () => {
           },
         ],
       },
+      append: false,
     };
     const stateBefore = {
       isFetching: true,
@@ -170,6 +173,175 @@ describe('reducer -> reduxBaseElem', () => {
         previous: null,
         page: 1,
         next: 2,
+      },
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> append = true`, () => {
+    const action = {
+      type: 'websites/FETCH_SUCCESS',
+      elems: [
+        {
+          id: 3,
+          title: 'Echo',
+          sub_title: 'Golf',
+        },
+        {
+          id: 4,
+          title: 'Foxtrot',
+          sub_title: 'Hotel',
+        },
+      ],
+      append: true,
+    };
+    const stateBefore = {
+      isFetching: true,
+      didInvalidate: true,
+      lastUpdated: undefined,
+      filterOnFields: ['title', 'sub_title'],
+      pagination: {},
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+      ],
+    };
+    const stateAfter = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: expect.any(Number), // Date.now(),
+      filterOnFields: ['title', 'sub_title'],
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+        {
+          id: 3,
+          title: 'Echo',
+          sub_title: 'Golf',
+          filterString: 'echo golf',
+        },
+        {
+          id: 4,
+          title: 'Foxtrot',
+          sub_title: 'Hotel',
+          filterString: 'foxtrot hotel',
+        },
+      ],
+      pagination: {},
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> with pagination, append = true`, () => {
+    const action = {
+      type: 'websites/FETCH_SUCCESS',
+      elems: {
+        count: 115,
+        page_size: 10,
+        previous: 1,
+        page: 2,
+        next: 3,
+        results: [
+          {
+            id: 3,
+            title: 'Echo',
+            sub_title: 'Golf',
+          },
+          {
+            id: 4,
+            title: 'Foxtrot',
+            sub_title: 'Hotel',
+          },
+        ],
+      },
+      append: true,
+    };
+    const stateBefore = {
+      isFetching: true,
+      didInvalidate: true,
+      lastUpdated: undefined,
+      filterOnFields: ['title', 'sub_title'],
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+      ],
+      pagination: {
+        count: 115,
+        page_size: 10,
+        previous: null,
+        page: 1,
+        next: 2,
+      },
+    };
+    const stateAfter = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: expect.any(Number), // Date.now(),
+      filterOnFields: ['title', 'sub_title'],
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+        {
+          id: 3,
+          title: 'Echo',
+          sub_title: 'Golf',
+          filterString: 'echo golf',
+        },
+        {
+          id: 4,
+          title: 'Foxtrot',
+          sub_title: 'Hotel',
+          filterString: 'foxtrot hotel',
+        },
+      ],
+      pagination: {
+        count: 115, // Number of results
+        page_size: 10,
+        previous: 1,
+        page: 2,
+        next: 3,
       },
     };
     deepFreeze(stateBefore);
@@ -355,6 +527,7 @@ describe('reducer -> reduxBaseElem', () => {
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
+
   it(`should handle ${nameSpace}/SET_UPDATE_BUSY_ID -> false`, () => {
     const action = {
       type: 'websites/SET_UPDATE_BUSY_ID',
@@ -387,6 +560,7 @@ describe('reducer -> reduxBaseElem', () => {
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
+
   it(`should handle ${nameSpace}/SET_DELETE_BUSY_ID -> false`, () => {
     const action = {
       type: 'websites/SET_DELETE_BUSY_ID',

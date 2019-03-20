@@ -57,15 +57,20 @@ export const elems = (nameSpace, state = initialState, action) => {
         responseElems = [action.elems];
       }
 
+      const newElems = responseElems.map((elem) => {
+        return Object.assign({}, elem, {
+          filterString: getFilterString(state.filterOnFields, elem),
+        });
+      });
+
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
         lastUpdated: Date.now(),
-        elems: responseElems.map((elem) => {
-          return Object.assign({}, elem, {
-            filterString: getFilterString(state.filterOnFields, elem),
-          });
-        }),
+        elems: action.append === true ? [
+          ...state.elems,
+          ...newElems,
+        ] : newElems,
         pagination,
       });
     }

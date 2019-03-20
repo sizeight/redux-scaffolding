@@ -9,9 +9,10 @@ export const fetchBusy = nameSpace => ({
   type: `${nameSpace}${t.FETCH_BUSY}`, // e.g. tags/FETCH_BUSY
 });
 
-export const fetchSuccess = (nameSpace, jsonResponse) => ({
+export const fetchSuccess = (nameSpace, jsonResponse, append = false) => ({
   type: `${nameSpace}${t.FETCH_SUCCESS}`, // e.g. tags/FETCH_SUCCESS
   elems: jsonResponse,
+  append,
 });
 
 export const fetchFailure = nameSpace => ({
@@ -24,7 +25,7 @@ export const fetchFailure = nameSpace => ({
  * apiURL = e.g. http://www.example.com/api/v1/websites/
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
-export const fetchElems = (nameSpace, apiPath, { queryParams = '' } = {}) => {
+export const fetchElems = (nameSpace, apiPath, { queryParams = '', append = false } = {}) => {
   const apiURL = `${process.env.API_URL}${apiPath}${queryParams}`;
 
   return (dispatch) => {
@@ -39,7 +40,7 @@ export const fetchElems = (nameSpace, apiPath, { queryParams = '' } = {}) => {
       .then(parseJSON)
       .then(
         (response) => {
-          dispatch(fetchSuccess(nameSpace, response));
+          dispatch(fetchSuccess(nameSpace, response, append));
         },
         (/* error */) => {
           dispatch(fetchFailure(nameSpace));

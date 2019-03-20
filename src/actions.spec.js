@@ -36,7 +36,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       { type: 'websites/FETCH_BUSY' },
-      { type: 'websites/FETCH_SUCCESS', elems: response },
+      { type: 'websites/FETCH_SUCCESS', elems: response, append: false },
     ];
     const store = mockStore({});
     return store.dispatch(fetchElems(nameSpace, apiPath))
@@ -76,7 +76,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       { type: 'posts/FETCH_BUSY' },
-      { type: 'posts/FETCH_SUCCESS', elems: response },
+      { type: 'posts/FETCH_SUCCESS', elems: response, append: false },
     ];
     const store = mockStore({});
     return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams }))
@@ -105,6 +105,54 @@ describe('actions -> reduxBaseElem (async)', () => {
   });
 
 
+  it('fetchElems() -> With append = true, Success', () => {
+    const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
+    const append = true;
+    const response = [
+      { id: 15 },
+      { id: 18 },
+    ];
+    nock(process.env.API_URL)
+      .get(apiPathAlt)
+      .reply(200, response);
+
+    const expectedActions = [
+      { type: 'posts/FETCH_BUSY' },
+      { type: 'posts/FETCH_SUCCESS', elems: response, append: true },
+    ];
+    const store = mockStore({});
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { append }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+  it('fetchElems() -> With queryParams and append = true, Success', () => {
+    const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
+    const queryParams = '?page=10&slug=extra_content';
+    const append = true;
+    const response = [
+      { id: 15 },
+      { id: 18 },
+    ];
+    nock(process.env.API_URL)
+      .get(`${apiPathAlt}${queryParams}`)
+      .reply(200, response);
+
+    const expectedActions = [
+      { type: 'posts/FETCH_BUSY' },
+      { type: 'posts/FETCH_SUCCESS', elems: response, append: true },
+    ];
+    const store = mockStore({});
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams, append }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+
   it('fetchElems() -> camelCase nameSpace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const apiPathAlt = '/api/v1/subscriptionterms/';
@@ -118,7 +166,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
     const expectedActions = [
       { type: 'subscriptionTerms/FETCH_BUSY' },
-      { type: 'subscriptionTerms/FETCH_SUCCESS', elems: response },
+      { type: 'subscriptionTerms/FETCH_SUCCESS', elems: response, append: false },
     ];
     const store = mockStore({});
     return store.dispatch(fetchElems(camelCaseNameSpace, apiPathAlt))
@@ -359,6 +407,7 @@ describe('actions -> reduxBaseElem', () => {
     const expectedAction = {
       type: 'websites/FETCH_SUCCESS',
       elems: response,
+      append: false,
     };
     expect(fetchSuccess(nameSpace, response)).toEqual(expectedAction);
   });
