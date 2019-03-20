@@ -79,7 +79,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_SUCCESS', elems: response },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, queryParams))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -98,14 +98,14 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_FAILURE' },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, queryParams))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams }))
       .then(() => {
         expect(store.getActions()).toMatchObject(expectedActions);
       });
   });
 
 
-  it('fetchElems() -> camelCase nameSPace should be changes to lowercase in API call', () => {
+  it('fetchElems() -> camelCase nameSpace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const apiPathAlt = '/api/v1/subscriptionterms/';
     const response = [

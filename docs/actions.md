@@ -26,7 +26,7 @@ const apiPath = '/api/v1/pages/'; // IMPORTANT: The API path
  */
 export const fetchPages = (parentId) => {
   const queryParams = `?parent=${parentId}`;
-  return fetchElems(nameSpace, apiPath, queryParams);
+  return fetchElems(nameSpace, apiPath, { queryParams });
 };
 
 

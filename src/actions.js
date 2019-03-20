@@ -24,7 +24,7 @@ export const fetchFailure = nameSpace => ({
  * apiURL = e.g. http://www.example.com/api/v1/websites/
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
-export const fetchElems = (nameSpace, apiPath, queryParams = '') => {
+export const fetchElems = (nameSpace, apiPath, { queryParams = '' } = {}) => {
   const apiURL = `${process.env.API_URL}${apiPath}${queryParams}`;
 
   return (dispatch) => {
