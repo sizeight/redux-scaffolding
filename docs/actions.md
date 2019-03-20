@@ -29,6 +29,12 @@ export const fetchPages = (parentId) => {
   return fetchElems(nameSpace, apiPath, { queryParams });
 };
 
+// ...and with append to elems
+export const fetchPages = (parentId) => {
+  const queryParams = `?parent=${parentId}`;
+  return fetchElems(nameSpace, apiPath, { queryParams, append: true });
+};
+
 
 // CREATE / UPDATE / DELETE
 export const setPageUpdateId = (id) => {
