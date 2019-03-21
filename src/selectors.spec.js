@@ -694,6 +694,20 @@ describe('selectors -> reduxBaseElem', () => {
     expect(getTotalElemCount(stateElems)).toEqual(derivedData);
   });
 
+  it('getTotalElemCount() -> If fetching, still return the count', () => {
+    const stateElems = {
+      isFetching: true,
+      didInvalidate: false,
+      lastUpdated: undefined,
+      elems: [],
+      filterValue: '',
+      sortKey: null,
+      sortDirection: null,
+    };
+    const derivedData = 0;
+    expect(getTotalElemCount(stateElems)).toEqual(derivedData);
+  });
+
   it('getFilteredElemCount() -> How many filtered elements are there?', () => {
     const stateElems = {
       isFetching: false,
