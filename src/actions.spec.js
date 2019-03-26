@@ -65,13 +65,16 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With queryParams, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
-    const queryParams = '?page=10&slug=extra_content';
+    const queryParams = {
+      page: 10,
+      slug: 'extra_content',
+    };
     const response = [
       { id: 15 },
       { id: 18 },
     ];
     nock(process.env.API_URL)
-      .get(`${apiPathAlt}${queryParams}`)
+      .get(`${apiPathAlt}?page=10&slug=extra_content`)
       .reply(200, response);
 
     const expectedActions = [
@@ -88,9 +91,12 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With queryParams, Failure', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
-    const queryParams = '?page=10&slug=extra_content';
+    const queryParams = {
+      page: 10,
+      slug: 'extra_content',
+    };
     nock(process.env.API_URL)
-      .get(`${apiPathAlt}${queryParams}`)
+      .get(`${apiPathAlt}?page=10&slug=extra_content`)
       .reply(500, '');
 
     const expectedActions = [
@@ -131,14 +137,17 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With queryParams and append = true, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
-    const queryParams = '?page=10&slug=extra_content';
+    const queryParams = {
+      page: 10,
+      slug: 'extra_content',
+    };
     const append = true;
     const response = [
       { id: 15 },
       { id: 18 },
     ];
     nock(process.env.API_URL)
-      .get(`${apiPathAlt}${queryParams}`)
+      .get(`${apiPathAlt}?page=10&slug=extra_content`)
       .reply(200, response);
 
     const expectedActions = [

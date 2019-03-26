@@ -26,7 +26,12 @@ export const fetchFailure = nameSpace => ({
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
 export const fetchElems = (nameSpace, apiPath, { queryParams = '', append = false } = {}) => {
-  const apiURL = `${process.env.API_URL}${apiPath}${queryParams}`;
+  let queryString = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&');
+  if (queryString) {
+    queryString = `?${queryString}`;
+  }
+
+  const apiURL = `${process.env.API_URL}${apiPath}${queryString}`;
 
   return (dispatch) => {
     dispatch(fetchBusy(nameSpace));
