@@ -25,13 +25,17 @@ const apiPath = '/api/v1/pages/'; // IMPORTANT: The API path
  * /pages/<id>/                   => Fetch page with specified id
  */
 export const fetchPages = (parentId) => {
-  const queryParams = `?parent=${parentId}`;
+  const queryParams = {
+    parent: parentId
+  };
   return fetchElems(nameSpace, apiPath, { queryParams });
 };
 
-// ...and with append to elems
+// ...and with queryParams and append to elems
 export const fetchPages = (parentId) => {
-  const queryParams = `?parent=${parentId}`;
+  const queryParams = {
+    parent: parentId
+  };
   return fetchElems(nameSpace, apiPath, { queryParams, append: true });
 };
 
