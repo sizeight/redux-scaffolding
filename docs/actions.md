@@ -38,7 +38,7 @@ export const fetchPages = (parentId) => {
 
 // CREATE / UPDATE / DELETE
 export const setPageUpdateId = (id) => {
-  return setUpdateId(nameSpace, apiPath, id);
+  return setUpdateId(nameSpace, id);
 };
 
 export const createUpdatePage = (data, id) => {
