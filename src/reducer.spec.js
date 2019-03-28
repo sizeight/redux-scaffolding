@@ -496,6 +496,7 @@ describe('reducer -> reduxBaseElem', () => {
           id: 14,
         },
       ],
+      pagination: {},
     };
     const stateAfter = {
       elems: [
@@ -506,6 +507,48 @@ describe('reducer -> reduxBaseElem', () => {
           id: 14,
         },
       ],
+      pagination: {},
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/UPDATE_SUCCESS -> DELETE with pagination`, () => {
+    const action = {
+      type: 'websites/UPDATE_SUCCESS',
+      id: 15,
+      elem: undefined,
+    };
+    const stateBefore = {
+      elems: [
+        {
+          id: 16,
+        },
+        {
+          id: 15,
+        },
+        {
+          id: 14,
+        },
+      ],
+      pagination: {
+        count: 3,
+        next: null,
+      },
+    };
+    const stateAfter = {
+      elems: [
+        {
+          id: 16,
+        },
+        {
+          id: 14,
+        },
+      ],
+      pagination: {
+        count: 2,
+        next: null,
+      },
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);

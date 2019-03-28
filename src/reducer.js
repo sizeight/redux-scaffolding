@@ -29,6 +29,34 @@ function getFilterString(filterOnFields, elem) {
   }).join(' ');
 }
 
+const pagination = (nameSpace, state, action) => {
+  switch (action.type) {
+    case `${nameSpace}${t.FETCH_SUCCESS}`: {
+      if (action.elems.results) {
+        // Response is paginated
+        return {
+          count: action.elems.count,
+          page_size: action.elems.page_size,
+          page: action.elems.page,
+          next: action.elems.next,
+          previous: action.elems.previous,
+        };
+      }
+      return state;
+    }
+    case `${nameSpace}${t.UPDATE_SUCCESS}`:
+      // DELETE
+      if (action.elem === undefined && state.count > 0) {
+        return Object.assign({}, state, {
+          count: state.count - 1,
+        });
+      }
+      return state;
+    default:
+      return state;
+  }
+};
+
 export const elems = (nameSpace, state = initialState, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_BUSY}`:
@@ -38,20 +66,12 @@ export const elems = (nameSpace, state = initialState, action) => {
       });
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
       let responseElems = [];
-      let pagination = {};
       if (Array.isArray(action.elems)) {
         // Response is an array of objects
         responseElems = action.elems.slice();
       } else if (action.elems.results) {
         // Response is paginated
         responseElems = action.elems.results.slice();
-        pagination = {
-          count: action.elems.count,
-          page_size: action.elems.page_size,
-          page: action.elems.page,
-          next: action.elems.next,
-          previous: action.elems.previous,
-        };
       } else {
         // Response is an individual object
         responseElems = [action.elems];
@@ -71,7 +91,7 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...state.elems,
           ...newElems,
         ] : newElems,
-        pagination,
+        pagination: pagination(nameSpace, state.pagination, action),
       });
     }
     case `${nameSpace}${t.FETCH_FAILURE}`:
@@ -106,6 +126,7 @@ export const elems = (nameSpace, state = initialState, action) => {
             ...state.elems.slice(0, idx),
             ...state.elems.slice(idx + 1),
           ],
+          pagination: pagination(nameSpace, state.pagination, action),
         });
       }
       // UPDATE
