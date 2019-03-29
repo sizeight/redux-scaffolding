@@ -22,6 +22,7 @@ describe('reducer -> reduxBaseElem', () => {
       sortKey: null,
       sortDirection: null,
       pagination: {},
+      extraInfo: {},
       updateBusyIds: [],
       deleteBusyIds: [],
     };
@@ -125,6 +126,63 @@ describe('reducer -> reduxBaseElem', () => {
       filterOnFields: ['title', 'sub_title'],
       responseElemsKey: 'facets',
       pagination: {},
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+      ],
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> alternative responseElemsKey provided with extra info`, () => {
+    const action = {
+      type: 'websites/FETCH_SUCCESS',
+      elems: {
+        total_count: 110,
+        facets: [
+          {
+            id: 1,
+            title: 'Alpha',
+            sub_title: 'Charlie',
+          },
+          {
+            id: 2,
+            title: 'Bravo',
+            sub_title: 'Delta',
+          },
+        ],
+      },
+      append: false,
+    };
+    const stateBefore = {
+      isFetching: true,
+      didInvalidate: true,
+      lastUpdated: undefined,
+      filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'facets',
+      pagination: {},
+    };
+    const stateAfter = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: expect.any(Number), // Date.now(),
+      filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'facets',
+      pagination: {},
+      extraInfo: {
+        total_count: 110,
+      },
       elems: [
         {
           id: 1,

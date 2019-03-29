@@ -5,15 +5,16 @@ export const initialState = {
   didInvalidate: false,
   lastUpdated: undefined,
   elems: [], // array of state objects
-  filterOnFields: [], // array of fields reducer should lowercase concat for each elem to filter on
-  responseElemsKey: undefined,
+  filterOnFields: [], // Optional, use to specify object fields that reducer should "lowercase concat" into one filter string
+  responseElemsKey: undefined, // Optional, use to specify if response array is in specific response object field
 
   updateId: -1, // id for which to show update form
   filterValue: '',
   sortKey: null,
   sortDirection: null,
 
-  pagination: {},
+  pagination: {}, // If paginated response, pagination info will be stored here
+  extraInfo: {}, // If responseElemsKey is specified, any extra response fields will be stored here
 
   updateBusyIds: [], // These elemId's are busy being updated
   deleteBusyIds: [], // These elemId's are busy being deleted
@@ -63,12 +64,22 @@ export const elems = (nameSpace, state = initialState, action) => {
       });
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
       let responseElems = [];
-      let responsePagination = {};
+      let responsePagination = initialState.pagination;
+      let responseExtraInfo = state.extraInfo;
 
       if (state.responseElemsKey !== undefined
         && Array.isArray(action.elems[state.responseElemsKey])) {
-        // Response is an array inside the response object
-        responseElems = action.elems[state.responseElemsKey];
+        // Response is an array inside the response object with potential extra info
+        const keys = Object.getOwnPropertyNames(action.elems);
+        keys.forEach((key) => {
+          if (key === state.responseElemsKey) {
+            responseElems = action.elems[key].slice();
+          } else {
+            responseExtraInfo = Object.assign({}, responseExtraInfo, {
+              [key]: action.elems[key],
+            });
+          }
+        });
       } else if (Array.isArray(action.elems)) {
         // Response is an array of objects
         responseElems = action.elems.slice();
@@ -96,6 +107,7 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...newElems,
         ] : newElems,
         pagination: responsePagination,
+        extraInfo: responseExtraInfo,
       });
     }
     case `${nameSpace}${t.FETCH_FAILURE}`:
