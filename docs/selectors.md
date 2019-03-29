@@ -44,14 +44,14 @@ export const getTotalPageCount = createSelector(
   [getStatePages],
   (statePages) => {
     return getTotalElemCount(statePages);
-  },  
+  },
 );
 
 export const getFilteredPageCount = createSelector(
   [getStatePages],
   (statePages) => {
     return getFilteredElemCount(statePages);
-  },  
+  },
 );
 
 export const getPageToUpdate = createSelector(
@@ -96,9 +96,37 @@ String: Return the string to filter elements by, e.g. 'blue' or 'dogs' or 'lapto
 #### Returns
 String: Return the key to sort by, e.g. 'title'
 
-### getSortDirection(nameSpace, state
+### getSortDirection(nameSpace, state)
 #### Arguments
   * nameSpace: The name of the state object
   * state: The Redux state
 #### Returns
 String: Returns `null`, `asc`, od `desc`
+
+### getPagination(nameSpace, state)
+#### Arguments
+  * nameSpace: The name of the state object
+  * state: The Redux state
+#### Returns
+Object: Returns an object with the pagination state object
+
+### getExtraInfo(nameSpace, state)
+#### Arguments
+  * nameSpace: The name of the state object
+  * state: The Redux state
+#### Returns
+Object: Returns an object with the extraInfo state object
+
+### getUpdateBusyIds(nameSpace, state)
+#### Arguments
+  * nameSpace: The name of the state object
+  * state: The Redux state
+#### Returns
+Object: Returns an array with id's of objects being updated
+
+### getDeleteBusyIds(nameSpace, state)
+#### Arguments
+  * nameSpace: The name of the state object
+  * state: The Redux state
+#### Returns
+Object: Returns an object with id's of objects being deleted
