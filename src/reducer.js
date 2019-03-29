@@ -1,12 +1,19 @@
 import * as t from './actionTypes';
 
+
+/*
+ * filterOnFields:    Optional, use to specify object fields that reducer should "lowercase concat"
+ *                    into one filter string
+ * responseElemsKey:  Optional, use to specify if response array is found in a specific response
+ *                    object field
+ */
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
   lastUpdated: undefined,
   elems: [], // array of state objects
-  filterOnFields: [], // Optional, use to specify object fields that reducer should "lowercase concat" into one filter string
-  responseElemsKey: undefined, // Optional, use to specify if response array is in specific response object field
+  filterOnFields: [], // Optional
+  responseElemsKey: undefined, // Optional
 
   updateId: -1, // id for which to show update form
   filterValue: '',
