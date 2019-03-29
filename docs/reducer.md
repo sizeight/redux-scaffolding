@@ -22,7 +22,7 @@ initialState = {
   isFetching: false,
   didInvalidate: false,
   lastUpdated: undefined,
-  elems: [], 
+  elems: [],
   filterOnFields: [], // Override this as below with relevant filter fields
 
   updateId: -1, // id for which to show update form
@@ -41,16 +41,17 @@ e.g.
     page: 2, // Active page
     next: 3, // Next page number
     previous: 1, // Previous page number,
-  }  
+  }
 */
 
 const nameSpace = 'pages'; // IMPORTANT: The state key
 
 // Example of including more state
 const initialWebsitesState = Object.assign({}, initialState, {
-  filterOnFields: ['title', 'subtitle'], // Fields to filter on
+  filterOnFields: ['title', 'subtitle'], // Fields to filter on (optional), defaults to []
+  responseElemsKey: 'results', // Optional, tell reducer in which object key to look for response array
   extra1: 'extra state 1',
-  extra1: 'extra state 2',
+  extra2: 'extra state 2',
 });
 
 const pages = (state = initialWebsitesState, action) => {
@@ -64,5 +65,4 @@ const pages = (state = initialWebsitesState, action) => {
 };
 
 export default pages;
-
 ```

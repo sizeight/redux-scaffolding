@@ -16,6 +16,7 @@ describe('reducer -> reduxBaseElem', () => {
       lastUpdated: undefined,
       elems: [],
       filterOnFields: [],
+      responseElemsKey: undefined,
       updateId: -1,
       filterValue: '',
       sortKey: null,
@@ -85,6 +86,59 @@ describe('reducer -> reduxBaseElem', () => {
         },
       ],
       pagination: {},
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> alternative responseElemsKey provided`, () => {
+    const action = {
+      type: 'websites/FETCH_SUCCESS',
+      elems: {
+        facets: [
+          {
+            id: 1,
+            title: 'Alpha',
+            sub_title: 'Charlie',
+          },
+          {
+            id: 2,
+            title: 'Bravo',
+            sub_title: 'Delta',
+          },
+        ],
+      },
+      append: false,
+    };
+    const stateBefore = {
+      isFetching: true,
+      didInvalidate: true,
+      lastUpdated: undefined,
+      filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'facets',
+      pagination: {},
+    };
+    const stateAfter = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: expect.any(Number), // Date.now(),
+      filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'facets',
+      pagination: {},
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+      ],
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);

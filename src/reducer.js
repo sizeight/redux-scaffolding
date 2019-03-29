@@ -6,6 +6,7 @@ export const initialState = {
   lastUpdated: undefined,
   elems: [], // array of state objects
   filterOnFields: [], // array of fields reducer should lowercase concat for each elem to filter on
+  responseElemsKey: undefined,
 
   updateId: -1, // id for which to show update form
   filterValue: '',
@@ -32,17 +33,13 @@ function getFilterString(filterOnFields, elem) {
 const pagination = (nameSpace, state, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
-      if (action.elems.results) {
-        // Response is paginated
-        return {
-          count: action.elems.count,
-          page_size: action.elems.page_size,
-          page: action.elems.page,
-          next: action.elems.next,
-          previous: action.elems.previous,
-        };
-      }
-      return state;
+      return {
+        count: action.elems.count,
+        page_size: action.elems.page_size,
+        page: action.elems.page,
+        next: action.elems.next,
+        previous: action.elems.previous,
+      };
     }
     case `${nameSpace}${t.UPDATE_SUCCESS}`:
       // DELETE
@@ -66,12 +63,19 @@ export const elems = (nameSpace, state = initialState, action) => {
       });
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
       let responseElems = [];
-      if (Array.isArray(action.elems)) {
+      let responsePagination = {};
+
+      if (state.responseElemsKey !== undefined
+        && Array.isArray(action.elems[state.responseElemsKey])) {
+        // Response is an array inside the response object
+        responseElems = action.elems[state.responseElemsKey];
+      } else if (Array.isArray(action.elems)) {
         // Response is an array of objects
         responseElems = action.elems.slice();
       } else if (action.elems.results) {
         // Response is paginated
         responseElems = action.elems.results.slice();
+        responsePagination = pagination(nameSpace, state.pagination, action);
       } else {
         // Response is an individual object
         responseElems = [action.elems];
@@ -91,7 +95,7 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...state.elems,
           ...newElems,
         ] : newElems,
-        pagination: pagination(nameSpace, state.pagination, action),
+        pagination: responsePagination,
       });
     }
     case `${nameSpace}${t.FETCH_FAILURE}`:
