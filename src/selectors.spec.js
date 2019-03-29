@@ -3,7 +3,7 @@ import rewire from 'rewire';
 
 import {
   getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getElems, getElemToUpdate,
-  getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection, getPagination,
+  getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection, getPagination, getExtraInfo,
   getTotalElemCount, getFilteredElemCount,
 } from './selectors';
 
@@ -211,6 +211,30 @@ describe('selectors -> reduxBaseElem', () => {
       next: 2,
     };
     expect(getPagination(nameSpace, state)).toEqual(derivedData);
+  });
+
+  it('getExtraInfo()', () => {
+    const state = {
+      posts: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        elems: [],
+        extraInfo: {
+          something: 'extra',
+        },
+      },
+      websites: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        elems: [],
+      },
+    };
+    const derivedData = {
+      something: 'extra',
+    };
+    expect(getExtraInfo(nameSpace, state)).toEqual(derivedData);
   });
 
 
