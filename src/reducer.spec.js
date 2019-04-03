@@ -43,6 +43,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
+
   it(`should handle ${nameSpace}/FETCH_SUCCESS`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
@@ -92,7 +93,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-  it(`should handle ${nameSpace}/FETCH_SUCCESS -> alternative responseElemsKey provided`, () => {
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> Alternative responseElemsKey provided, not paginated`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
       elems: {
@@ -145,7 +146,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-  it(`should handle ${nameSpace}/FETCH_SUCCESS -> alternative responseElemsKey provided with extra info`, () => {
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> Alternative responseElemsKey provided with extra info, not paginated`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
       elems: {
@@ -229,15 +230,13 @@ describe('reducer -> reduxBaseElem', () => {
       .toThrow(new Error("Object has no key 'sub_title'"));
   });
 
-  it(`should handle ${nameSpace}/FETCH_SUCCESS -> with pagination`, () => {
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> Alternative responseElemsKey for pagination`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
       elems: {
         count: 115,
-        page_size: 10,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
         previous: null,
-        page: 1,
-        next: 2,
         results: [
           {
             id: 1,
@@ -258,6 +257,8 @@ describe('reducer -> reduxBaseElem', () => {
       didInvalidate: true,
       lastUpdated: undefined,
       filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'results',
+      extraInfo: {},
       pagination: {},
     };
     const stateAfter = {
@@ -265,6 +266,7 @@ describe('reducer -> reduxBaseElem', () => {
       didInvalidate: false,
       lastUpdated: expect.any(Number), // Date.now(),
       filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'results',
       elems: [
         {
           id: 1,
@@ -279,17 +281,72 @@ describe('reducer -> reduxBaseElem', () => {
           filterString: 'bravo delta',
         },
       ],
+      extraInfo: {
+        count: 115, // Number of results
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
+        previous: null,
+      },
       pagination: {
         count: 115, // Number of results
-        page_size: 10,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
         previous: null,
-        page: 1,
-        next: 2,
+        pageSize: 10,
+        pageCount: 12,
+        pageNumber: 1, // 0 indexed
+        pages: [
+          {
+            pageNumber: 0,
+            active: false,
+            params: '?q=gold&limit=10&offset=0',
+          },
+          {
+            pageNumber: 1,
+            active: true,
+            params: '?q=gold&limit=10&offset=10',
+          },
+          {
+            pageNumber: 2,
+            active: false,
+            params: '?q=gold&limit=10&offset=20',
+          },
+          {
+            pageNumber: 3,
+            active: false,
+            params: '?q=gold&limit=10&offset=30',
+          },
+          {
+            pageNumber: 4,
+            active: false,
+            params: '?q=gold&limit=10&offset=40',
+          },
+          {
+            pageNumber: 5,
+            active: false,
+            params: '?q=gold&limit=10&offset=50',
+          },
+          {
+            pageNumber: 6,
+            active: false,
+            params: '?q=gold&limit=10&offset=60',
+          },
+          {
+            pageNumber: 7,
+            active: false,
+            params: '?q=gold&limit=10&offset=70',
+          },
+          {
+            pageNumber: 8,
+            active: false,
+            params: '?q=gold&limit=10&offset=80',
+          },
+        ],
+
       },
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
+
 
   it(`should handle ${nameSpace}/FETCH_SUCCESS -> append = true`, () => {
     const action = {
@@ -366,15 +423,13 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-  it(`should handle ${nameSpace}/FETCH_SUCCESS -> with pagination, append = true`, () => {
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> Alternative responseElemsKey for pagination AND append = true`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
       elems: {
-        count: 115,
-        page_size: 10,
-        previous: 1,
-        page: 2,
-        next: 3,
+        count: 35,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=20',
+        previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=0',
         results: [
           {
             id: 3,
@@ -395,6 +450,7 @@ describe('reducer -> reduxBaseElem', () => {
       didInvalidate: true,
       lastUpdated: undefined,
       filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'results',
       elems: [
         {
           id: 1,
@@ -409,12 +465,18 @@ describe('reducer -> reduxBaseElem', () => {
           filterString: 'bravo delta',
         },
       ],
-      pagination: {
-        count: 115,
-        page_size: 10,
+      extraInfo: {
+        count: 35,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
         previous: null,
-        page: 1,
-        next: 2,
+      },
+      pagination: {
+        count: 35,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
+        previous: null,
+        pageCount: 4,
+        pageNumber: 1,
+        pageSize: 10,
       },
     };
     const stateAfter = {
@@ -422,6 +484,7 @@ describe('reducer -> reduxBaseElem', () => {
       didInvalidate: false,
       lastUpdated: expect.any(Number), // Date.now(),
       filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'results',
       elems: [
         {
           id: 1,
@@ -448,17 +511,46 @@ describe('reducer -> reduxBaseElem', () => {
           filterString: 'foxtrot hotel',
         },
       ],
+      extraInfo: {
+        count: 35,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=20',
+        previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=0',
+      },
       pagination: {
-        count: 115, // Number of results
-        page_size: 10,
-        previous: 1,
-        page: 2,
-        next: 3,
+        count: 35,
+        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=20',
+        previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=0',
+        pageCount: 4,
+        pageNumber: 1,
+        pageSize: 10,
+        pages: [
+          {
+            active: false,
+            pageNumber: 0,
+            params: '?q=gold&limit=10&offset=0',
+          },
+          {
+            active: true,
+            pageNumber: 1,
+            params: '?q=gold&limit=10&offset=10',
+          },
+          {
+            active: false,
+            pageNumber: 2,
+            params: '?q=gold&limit=10&offset=20',
+          },
+          {
+            active: false,
+            pageNumber: 3,
+            params: '?q=gold&limit=10&offset=30',
+          },
+        ],
       },
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
+
 
   it(`should handle ${nameSpace}/FETCH_FAILURE`, () => {
     const action = {

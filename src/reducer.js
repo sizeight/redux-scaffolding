@@ -13,7 +13,7 @@ export const initialState = {
   lastUpdated: undefined,
   elems: [], // array of state objects
   filterOnFields: [], // Optional
-  responseElemsKey: undefined, // Optional
+  responseElemsKey: undefined, // Optional, compulsory if pagination is used
 
   updateId: -1, // id for which to show update form
   filterValue: '',
@@ -38,15 +38,62 @@ function getFilterString(filterOnFields, elem) {
   }).join(' ');
 }
 
+
 const pagination = (nameSpace, state, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
+      let pageSize;
+      let pageCount;
+      let pageNumber = 0;
+      let resultPages = [];
+
+      const urlToAnalyse = action.elems.next || action.elems.previous;
+      if (urlToAnalyse) {
+        const params = (new URL(urlToAnalyse)).searchParams;
+        const limit = Number.parseInt(params.get('limit'), 10);
+        pageSize = limit;
+        pageCount = Math.ceil(action.elems.count / pageSize);
+        pageNumber = limit / pageSize;
+
+
+        const paramsObj = {};
+        params.forEach((value, key) => {
+          paramsObj[key] = value;
+        });
+
+
+        resultPages = [...Array(pageCount).keys()].map((obj, i) => {
+          return Object.assign({}, {
+            pageNumber: i,
+            active: i === pageNumber,
+            params: Object.keys(paramsObj).map((key, j) => {
+              return `${j === 0 ? '?' : ''}${key}=${key === 'offset' ? i * limit : paramsObj[key]}`;
+            }).join('&'),
+          });
+        });
+
+        // Show at most 9 pages with active page in the middle if possible.
+        const pagesToLeft = pageNumber;
+        const pagesToRight = pageCount - pageNumber;
+
+        const pagesShownToLeft = pagesToRight < 5 ? 9 - pagesToRight : 4;
+        const pagesShownToRight = pagesToLeft < 4 ? 9 - pagesToLeft : 5;
+
+        const firstPage = pageNumber - pagesShownToLeft < 0 ? 0 : pageNumber - pagesShownToLeft;
+        const lastPage = pageNumber + pagesShownToRight;
+
+        resultPages = resultPages.slice(firstPage, lastPage);
+      }
+
+
       return {
         count: action.elems.count,
-        page_size: action.elems.page_size,
-        page: action.elems.page,
         next: action.elems.next,
         previous: action.elems.previous,
+        pageSize,
+        pageCount,
+        pageNumber,
+        pages: resultPages,
       };
     }
     case `${nameSpace}${t.UPDATE_SUCCESS}`:
@@ -76,7 +123,7 @@ export const elems = (nameSpace, state = initialState, action) => {
 
       if (state.responseElemsKey !== undefined
         && Array.isArray(action.elems[state.responseElemsKey])) {
-        // Response is an array inside the response object with potential extra info
+        // Response is an array inside the response object with potential extra info...
         const keys = Object.getOwnPropertyNames(action.elems);
         keys.forEach((key) => {
           if (key === state.responseElemsKey) {
@@ -87,17 +134,21 @@ export const elems = (nameSpace, state = initialState, action) => {
             });
           }
         });
+
+        // ...and potential pagination
+        // Store pagination info only if pagination keys are in response
+        if (keys.findIndex(x => x === 'count') > -1 && keys.findIndex(x => x === 'next') > -1
+          && keys.findIndex(x => x === 'previous') > -1) {
+          responsePagination = pagination(nameSpace, state.pagination, action);
+        }
       } else if (Array.isArray(action.elems)) {
         // Response is an array of objects
         responseElems = action.elems.slice();
-      } else if (action.elems.results) {
-        // Response is paginated
-        responseElems = action.elems.results.slice();
-        responsePagination = pagination(nameSpace, state.pagination, action);
       } else {
         // Response is an individual object
         responseElems = [action.elems];
       }
+
 
       const newElems = responseElems.map((elem) => {
         return Object.assign({}, elem, {
