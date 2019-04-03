@@ -42,6 +42,8 @@ function getFilterString(filterOnFields, elem) {
 const pagination = (nameSpace, state, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
+      const nextParams = action.elems.next ? (new URL(action.elems.next)).search : null;
+      const previousParams = action.elems.previous ? (new URL(action.elems.previous)).search : null;
       let pageSize;
       let pageCount;
       let pageNumber = 0;
@@ -90,6 +92,8 @@ const pagination = (nameSpace, state, action) => {
         count: action.elems.count,
         next: action.elems.next,
         previous: action.elems.previous,
+        nextParams,
+        previousParams,
         pageSize,
         pageCount,
         pageNumber,

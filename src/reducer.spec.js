@@ -290,6 +290,8 @@ describe('reducer -> reduxBaseElem', () => {
         count: 115, // Number of results
         next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
         previous: null,
+        nextParams: '?q=gold&limit=10&offset=10',
+        previousParams: null,
         pageSize: 10,
         pageCount: 12,
         pageNumber: 1, // 0 indexed
@@ -520,6 +522,8 @@ describe('reducer -> reduxBaseElem', () => {
         count: 35,
         next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=20',
         previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=0',
+        nextParams: '?q=gold&limit=10&offset=20',
+        previousParams: '?q=gold&limit=10&offset=0',
         pageCount: 4,
         pageNumber: 1,
         pageSize: 10,
