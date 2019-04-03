@@ -51,11 +51,23 @@ const pagination = (nameSpace, state, action) => {
 
       const urlToAnalyse = action.elems.next || action.elems.previous;
       if (urlToAnalyse) {
-        const params = (new URL(urlToAnalyse)).searchParams;
-        const limit = Number.parseInt(params.get('limit'), 10);
+        let params;
+        let limit;
+        let offset;
+        if (action.elems.next) {
+          params = (new URL(action.elems.next)).searchParams;
+          limit = Number.parseInt(params.get('limit'), 10);
+          offset = Number.parseInt(params.get('offset'), 10);
+          pageNumber = (offset - limit) / limit;
+        } else {
+          params = (new URL(action.elems.previous)).searchParams;
+          limit = Number.parseInt(params.get('limit'), 10);
+          offset = Number.parseInt(params.get('offset'), 10);
+          pageNumber = (offset + limit) / limit;
+        }
+
         pageSize = limit;
         pageCount = Math.ceil(action.elems.count / pageSize);
-        pageNumber = limit / pageSize;
 
 
         const paramsObj = {};

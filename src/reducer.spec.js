@@ -294,16 +294,16 @@ describe('reducer -> reduxBaseElem', () => {
         previousParams: null,
         pageSize: 10,
         pageCount: 12,
-        pageNumber: 1, // 0 indexed
+        pageNumber: 0, // 0 indexed
         pages: [
           {
             pageNumber: 0,
-            active: false,
+            active: true,
             params: '?q=gold&limit=10&offset=0',
           },
           {
             pageNumber: 1,
-            active: true,
+            active: false,
             params: '?q=gold&limit=10&offset=10',
           },
           {
