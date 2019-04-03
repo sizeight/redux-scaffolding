@@ -235,7 +235,7 @@ describe('reducer -> reduxBaseElem', () => {
       type: 'websites/FETCH_SUCCESS',
       elems: {
         count: 115,
-        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
+        next: 'http://www.xyz.com/api/v1/search/?q=gold+AND+silver&limit=10&offset=10',
         previous: null,
         results: [
           {
@@ -283,14 +283,14 @@ describe('reducer -> reduxBaseElem', () => {
       ],
       extraInfo: {
         count: 115, // Number of results
-        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
+        next: 'http://www.xyz.com/api/v1/search/?q=gold+AND+silver&limit=10&offset=10',
         previous: null,
       },
       pagination: {
         count: 115, // Number of results
-        next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=10',
+        next: 'http://www.xyz.com/api/v1/search/?q=gold+AND+silver&limit=10&offset=10',
         previous: null,
-        nextParams: '?q=gold&limit=10&offset=10',
+        nextParams: '?q=gold+AND+silver&limit=10&offset=10',
         previousParams: null,
         pageSize: 10,
         pageCount: 12,
@@ -299,47 +299,131 @@ describe('reducer -> reduxBaseElem', () => {
           {
             pageNumber: 0,
             active: true,
-            params: '?q=gold&limit=10&offset=0',
+            params: '?q=gold+AND+silver&limit=10&offset=0',
           },
           {
             pageNumber: 1,
             active: false,
-            params: '?q=gold&limit=10&offset=10',
+            params: '?q=gold+AND+silver&limit=10&offset=10',
           },
           {
             pageNumber: 2,
             active: false,
-            params: '?q=gold&limit=10&offset=20',
+            params: '?q=gold+AND+silver&limit=10&offset=20',
           },
           {
             pageNumber: 3,
             active: false,
-            params: '?q=gold&limit=10&offset=30',
+            params: '?q=gold+AND+silver&limit=10&offset=30',
           },
           {
             pageNumber: 4,
             active: false,
-            params: '?q=gold&limit=10&offset=40',
+            params: '?q=gold+AND+silver&limit=10&offset=40',
           },
           {
             pageNumber: 5,
             active: false,
-            params: '?q=gold&limit=10&offset=50',
+            params: '?q=gold+AND+silver&limit=10&offset=50',
           },
           {
             pageNumber: 6,
             active: false,
-            params: '?q=gold&limit=10&offset=60',
+            params: '?q=gold+AND+silver&limit=10&offset=60',
           },
           {
             pageNumber: 7,
             active: false,
-            params: '?q=gold&limit=10&offset=70',
+            params: '?q=gold+AND+silver&limit=10&offset=70',
           },
           {
             pageNumber: 8,
             active: false,
-            params: '?q=gold&limit=10&offset=80',
+            params: '?q=gold+AND+silver&limit=10&offset=80',
+          },
+        ],
+
+      },
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/FETCH_SUCCESS -> Alternative responseElemsKey for pagination (2 pages, next=null, previous='...')`, () => {
+    const action = {
+      type: 'websites/FETCH_SUCCESS',
+      elems: {
+        count: 12,
+        next: null,
+        previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10',
+        results: [
+          {
+            id: 1,
+            title: 'Alpha',
+            sub_title: 'Charlie',
+          },
+          {
+            id: 2,
+            title: 'Bravo',
+            sub_title: 'Delta',
+          },
+        ],
+      },
+      append: false,
+    };
+    const stateBefore = {
+      isFetching: true,
+      didInvalidate: true,
+      lastUpdated: undefined,
+      filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'results',
+      extraInfo: {},
+      pagination: {},
+    };
+    const stateAfter = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: expect.any(Number), // Date.now(),
+      filterOnFields: ['title', 'sub_title'],
+      responseElemsKey: 'results',
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          sub_title: 'Charlie',
+          filterString: 'alpha charlie',
+        },
+        {
+          id: 2,
+          title: 'Bravo',
+          sub_title: 'Delta',
+          filterString: 'bravo delta',
+        },
+      ],
+      extraInfo: {
+        count: 12, // Number of results
+        next: null,
+        previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10',
+      },
+      pagination: {
+        count: 12, // Number of results
+        next: null,
+        previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10',
+        nextParams: null,
+        previousParams: '?q=gold&limit=10',
+        pageSize: 10,
+        pageCount: 2,
+        pageNumber: 1, // 0 indexed
+        pages: [
+          {
+            pageNumber: 0,
+            active: false,
+            params: '?q=gold&limit=10&offset=0',
+          },
+          {
+            pageNumber: 1,
+            active: true,
+            params: '?q=gold&limit=10&offset=10',
           },
         ],
 

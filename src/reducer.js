@@ -62,7 +62,7 @@ const pagination = (nameSpace, state, action) => {
         } else {
           params = (new URL(action.elems.previous)).searchParams;
           limit = Number.parseInt(params.get('limit'), 10);
-          offset = Number.parseInt(params.get('offset'), 10);
+          offset = params.get('offset') ? Number.parseInt(params.get('offset'), 10) : 0;
           pageNumber = (offset + limit) / limit;
         }
 
@@ -72,8 +72,14 @@ const pagination = (nameSpace, state, action) => {
 
         const paramsObj = {};
         params.forEach((value, key) => {
-          paramsObj[key] = value;
+          if (key === 'q') {
+            // q=gold AND silver becomes q=gold+AND+silver which is correct
+            paramsObj[key] = value.split(' ').join('+');
+          } else {
+            paramsObj[key] = value;
+          }
         });
+        paramsObj.offset = paramsObj.offset || offset;
 
 
         resultPages = [...Array(pageCount).keys()].map((obj, i) => {
