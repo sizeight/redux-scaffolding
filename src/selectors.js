@@ -42,8 +42,6 @@ const propExists = (obj, sortKeys) => {
         return ob[sortKey];
       }
       return undefined;
-      // return obj && Object.prototype.hasOwnProperty.call(obj, prop) ? obj[prop] : undefined;
-      // return obj && obj[prop] ? obj[prop] : undefined;
     },
     obj,
   );
