@@ -30,6 +30,37 @@ const getFilteredElems = (elems, filterValue) => {
   return filteredElems;
 };
 
+
+const propExists = (obj, sortKeys) => {
+  return !!sortKeys.split('__').reduce(
+    (ob, sortKey) => {
+      if (ob && Object.prototype.hasOwnProperty.call(ob, sortKey)) {
+        if (ob[sortKey] === undefined || ob[sortKey] === null) {
+          // The property exists, but it has a value of undefined or null
+          return true;
+        }
+        return ob[sortKey];
+      }
+      return undefined;
+      // return obj && Object.prototype.hasOwnProperty.call(obj, prop) ? obj[prop] : undefined;
+      // return obj && obj[prop] ? obj[prop] : undefined;
+    },
+    obj,
+  );
+};
+
+const propValue = (obj, sortKeys) => {
+  let value = obj;
+  sortKeys.split('__').forEach(
+    (sortKey) => {
+      value = value[sortKey];
+    },
+    obj,
+  );
+  return value;
+};
+
+
 /*
  * If descending or ascending sort required, return sorted elements else just return elems.
  */
@@ -37,15 +68,15 @@ const getSortedElems = (elems, sortKey, sortDirection) => {
   let sortedElems = elems.slice();
   if (sortKey !== null && sortDirection !== null) {
     sortedElems = sortedElems.sort((a, b) => {
-      const aHasKey = Object.prototype.hasOwnProperty.call(a, sortKey);
-      const bHasKey = Object.prototype.hasOwnProperty.call(b, sortKey);
+      const aHasKey = propExists(a, sortKey);
+      const bHasKey = propExists(b, sortKey);
 
       if (!aHasKey || !bHasKey) {
         throw new Error(`Object has no key ${sortKey}`);
       }
 
-      let valA = a[sortKey]; // ignore upper and lowercase
-      let valB = b[sortKey]; // ignore upper and lowercase
+      let valA = propValue(a, sortKey); // ignore upper and lowercase
+      let valB = propValue(b, sortKey); // ignore upper and lowercase
 
       if (typeof valA === 'number' && typeof valB === 'number') {
         // Sort integers

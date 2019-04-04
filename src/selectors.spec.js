@@ -373,6 +373,64 @@ describe('selectors -> reduxBaseElem', () => {
       .toThrow(new Error('Object has no key wrongKey'));
   });
 
+  it('getSortedElems() -> Nested sortKey provided "author__first_name"', () => {
+    const sortKey = 'author__first_name';
+    const sortDirection = 'asc';
+    const elems = [
+      {
+        id: 1,
+        author: {
+          first_name: 'Charlie',
+        },
+      },
+      {
+        id: 2,
+        author: {
+          first_name: 'Alpha',
+        },
+      },
+      {
+        id: 3,
+        author: {
+          first_name: 'Bravo',
+        },
+      },
+      {
+        id: 4,
+        author: {
+          first_name: 'Delta',
+        },
+      },
+    ];
+    const derivedData = [
+      {
+        id: 2,
+        author: {
+          first_name: 'Alpha',
+        },
+      },
+      {
+        id: 3,
+        author: {
+          first_name: 'Bravo',
+        },
+      },
+      {
+        id: 1,
+        author: {
+          first_name: 'Charlie',
+        },
+      },
+      {
+        id: 4,
+        author: {
+          first_name: 'Delta',
+        },
+      },
+    ];
+    expect(getSortedElems(elems, sortKey, sortDirection)).toEqual(derivedData);
+  });
+
   it('getSortedElems() -> Ascending strings', () => {
     const sortKey = 'title';
     const sortDirection = 'asc';
