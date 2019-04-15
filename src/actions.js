@@ -4,6 +4,7 @@ import { getCSRFToken, checkStatus, parseJSON } from './utils';
 
 import * as t from './actionTypes';
 
+
 // Fetching
 export const fetchBusy = nameSpace => ({
   type: `${nameSpace}${t.FETCH_BUSY}`, // e.g. tags/FETCH_BUSY
@@ -25,7 +26,8 @@ export const fetchFailure = nameSpace => ({
  * apiURL = e.g. http://www.example.com/api/v1/websites/
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
-export const fetchElems = (nameSpace, apiPath, { queryParams = '', append = false } = {}) => {
+export const fetchElems = (nameSpace, apiPath,
+  { queryParams = '', append = false, onErrorAction } = {}) => {
   let queryString = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&');
   if (queryString) {
     queryString = `?${queryString}`;
@@ -47,8 +49,17 @@ export const fetchElems = (nameSpace, apiPath, { queryParams = '', append = fals
         (response) => {
           dispatch(fetchSuccess(nameSpace, response, append));
         },
-        (/* error */) => {
+        (error) => {
           dispatch(fetchFailure(nameSpace));
+          if (onErrorAction) {
+            dispatch(onErrorAction(error));
+          }
+
+          // TODO: return the errors jsonResponse? or store in the elems state?
+          // Also with createUpdateElem & deleteElem
+          // return error.errorLogInfo.jsonResponse;
+          // OR
+          // dispatch(fetchFailure(nameSpace, error.errorLogInfo.jsonResponse));
         },
       );
   };
