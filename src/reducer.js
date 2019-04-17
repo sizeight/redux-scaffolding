@@ -42,13 +42,17 @@ function getFilterString(filterOnFields, elem) {
 const pagination = (nameSpace, state, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
-      const nextParams = action.elems.next ? `${action.elems.next.split('?')[1]}` : null;
-      const previousParams = action.elems.previous
+      const nextQueryParamsString = action.elems.next ? `${action.elems.next.split('?')[1]}` : null;
+      const previousQueryParamsString = action.elems.previous
         ? `${action.elems.previous.split('?')[1]}` : null;
       let pageSize;
       let pageCount;
       let pageNumber = 0;
       let resultPages = [];
+
+      // new
+      let nextQueryParams = null;
+      let previousQueryParams = null;
 
       const urlToAnalyse = action.elems.next || action.elems.previous;
       if (urlToAnalyse) {
@@ -56,27 +60,34 @@ const pagination = (nameSpace, state, action) => {
         let limit;
         let offset;
         if (action.elems.next) {
-          params = nextParams.split('&');
-          const pairs = nextParams.split('&');
-          params = {};
+          const pairs = nextQueryParamsString.split('&');
+          nextQueryParams = {};
           pairs.forEach((pair) => {
             const kv = pair.split('=');
-            params[kv[0]] = decodeURIComponent(kv[1] || '');
+            nextQueryParams[kv[0]] = decodeURIComponent(kv[1] || '');
+            if (kv[0] === 'limit' || kv[0] === 'offset') {
+              nextQueryParams[kv[0]] = Number.parseInt(nextQueryParams[kv[0]], 10);
+            }
           });
-          limit = Number.parseInt(params.limit, 10);
-          offset = Number.parseInt(params.offset, 10);
+          limit = Number.parseInt(nextQueryParams.limit, 10);
+          offset = Number.parseInt(nextQueryParams.offset, 10);
           pageNumber = (offset - limit) / limit;
-        } else {
-          params = previousParams.split('&');
-          const pairs = previousParams.split('&');
-          params = {};
+          params = Object.assign({}, nextQueryParams);
+        }
+        if (action.elems.previous) {
+          const pairs = previousQueryParamsString.split('&');
+          previousQueryParams = {};
           pairs.forEach((pair) => {
             const kv = pair.split('=');
-            params[kv[0]] = decodeURIComponent(kv[1] || '');
+            previousQueryParams[kv[0]] = decodeURIComponent(kv[1] || '');
+            if (kv[0] === 'limit' || kv[0] === 'offset') {
+              previousQueryParams[kv[0]] = Number.parseInt(previousQueryParams[kv[0]], 10);
+            }
           });
-          limit = Number.parseInt(params.limit, 10);
-          offset = params.offset ? Number.parseInt(params.offset, 10) : 0;
+          limit = Number.parseInt(previousQueryParams.limit, 10);
+          offset = previousQueryParams.offset ? Number.parseInt(previousQueryParams.offset, 10) : 0;
           pageNumber = (offset + limit) / limit;
+          params = Object.assign({}, previousQueryParams);
         }
 
         pageSize = limit;
@@ -87,9 +98,13 @@ const pagination = (nameSpace, state, action) => {
           return Object.assign({}, {
             pageNumber: i,
             active: i === pageNumber,
-            params: Object.keys(params).map((key, j) => {
+            queryParamsString: Object.keys(params).map((key, j) => {
               return `${j === 0 ? '?' : ''}${key}=${key === 'offset' ? i * limit : params[key]}`;
             }).join('&'),
+            queryParams: Object.assign({}, params, {
+              limit: Number.parseInt(limit, 10),
+              offset: i * limit,
+            }),
           });
         });
 
@@ -110,8 +125,10 @@ const pagination = (nameSpace, state, action) => {
         count: action.elems.count,
         next: action.elems.next,
         previous: action.elems.previous,
-        nextParams: nextParams ? `?${nextParams}` : null,
-        previousParams: previousParams ? `?${previousParams}` : null,
+        nextQueryParamsString: nextQueryParamsString ? `?${nextQueryParamsString}` : null,
+        nextQueryParams,
+        previousQueryParamsString: previousQueryParamsString ? `?${previousQueryParamsString}` : null,
+        previousQueryParams,
         pageSize,
         pageCount,
         pageNumber,

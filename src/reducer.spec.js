@@ -290,8 +290,14 @@ describe('reducer -> reduxBaseElem', () => {
         count: 115, // Number of results
         next: 'http://www.xyz.com/api/v1/search/?q=gold+AND+silver&limit=10&offset=10',
         previous: null,
-        nextParams: '?q=gold+AND+silver&limit=10&offset=10',
-        previousParams: null,
+        nextQueryParamsString: '?q=gold+AND+silver&limit=10&offset=10',
+        nextQueryParams: {
+          q: 'gold+AND+silver',
+          limit: 10,
+          offset: 10,
+        },
+        previousQueryParamsString: null,
+        previousQueryParams: null,
         pageSize: 10,
         pageCount: 12,
         pageNumber: 0, // 0 indexed
@@ -299,47 +305,92 @@ describe('reducer -> reduxBaseElem', () => {
           {
             pageNumber: 0,
             active: true,
-            params: '?q=gold+AND+silver&limit=10&offset=0',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=0',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 0,
+            },
           },
           {
             pageNumber: 1,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=10',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=10',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 10,
+            },
           },
           {
             pageNumber: 2,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=20',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=20',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 20,
+            },
           },
           {
             pageNumber: 3,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=30',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=30',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 30,
+            },
           },
           {
             pageNumber: 4,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=40',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=40',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 40,
+            },
           },
           {
             pageNumber: 5,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=50',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=50',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 50,
+            },
           },
           {
             pageNumber: 6,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=60',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=60',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 60,
+            },
           },
           {
             pageNumber: 7,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=70',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=70',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 70,
+            },
           },
           {
             pageNumber: 8,
             active: false,
-            params: '?q=gold+AND+silver&limit=10&offset=80',
+            queryParamsString: '?q=gold+AND+silver&limit=10&offset=80',
+            queryParams: {
+              q: 'gold+AND+silver',
+              limit: 10,
+              offset: 80,
+            },
           },
         ],
 
@@ -409,8 +460,13 @@ describe('reducer -> reduxBaseElem', () => {
         count: 12, // Number of results
         next: null,
         previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10',
-        nextParams: null,
-        previousParams: '?q=gold&limit=10',
+        nextQueryParamsString: null,
+        nextQueryParams: null,
+        previousQueryParamsString: '?q=gold&limit=10',
+        previousQueryParams: {
+          q: 'gold',
+          limit: 10,
+        },
         pageSize: 10,
         pageCount: 2,
         pageNumber: 1, // 0 indexed
@@ -418,12 +474,22 @@ describe('reducer -> reduxBaseElem', () => {
           {
             pageNumber: 0,
             active: false,
-            params: '?q=gold&limit=10&offset=0',
+            queryParamsString: '?q=gold&limit=10&offset=0',
+            queryParams: {
+              q: 'gold',
+              limit: 10,
+              offset: 0,
+            },
           },
           {
             pageNumber: 1,
             active: true,
-            params: '?q=gold&limit=10&offset=10',
+            queryParamsString: '?q=gold&limit=10&offset=10',
+            queryParams: {
+              q: 'gold',
+              limit: 10,
+              offset: 10,
+            },
           },
         ],
 
@@ -606,8 +672,18 @@ describe('reducer -> reduxBaseElem', () => {
         count: 35,
         next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=20',
         previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=0',
-        nextParams: '?q=gold&limit=10&offset=20',
-        previousParams: '?q=gold&limit=10&offset=0',
+        nextQueryParamsString: '?q=gold&limit=10&offset=20',
+        nextQueryParams: {
+          q: 'gold',
+          limit: 10,
+          offset: 20,
+        },
+        previousQueryParamsString: '?q=gold&limit=10&offset=0',
+        previousQueryParams: {
+          q: 'gold',
+          limit: 10,
+          offset: 0,
+        },
         pageCount: 4,
         pageNumber: 1,
         pageSize: 10,
@@ -615,22 +691,42 @@ describe('reducer -> reduxBaseElem', () => {
           {
             active: false,
             pageNumber: 0,
-            params: '?q=gold&limit=10&offset=0',
+            queryParamsString: '?q=gold&limit=10&offset=0',
+            queryParams: {
+              q: 'gold',
+              limit: 10,
+              offset: 0,
+            },
           },
           {
             active: true,
             pageNumber: 1,
-            params: '?q=gold&limit=10&offset=10',
+            queryParamsString: '?q=gold&limit=10&offset=10',
+            queryParams: {
+              q: 'gold',
+              limit: 10,
+              offset: 10,
+            },
           },
           {
             active: false,
             pageNumber: 2,
-            params: '?q=gold&limit=10&offset=20',
+            queryParamsString: '?q=gold&limit=10&offset=20',
+            queryParams: {
+              q: 'gold',
+              limit: 10,
+              offset: 20,
+            },
           },
           {
             active: false,
             pageNumber: 3,
-            params: '?q=gold&limit=10&offset=30',
+            queryParamsString: '?q=gold&limit=10&offset=30',
+            queryParams: {
+              q: 'gold',
+              limit: 10,
+              offset: 30,
+            },
           },
         ],
       },
