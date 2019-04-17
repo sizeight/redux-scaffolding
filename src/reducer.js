@@ -42,8 +42,9 @@ function getFilterString(filterOnFields, elem) {
 const pagination = (nameSpace, state, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
-      const nextParams = action.elems.next ? (new URL(action.elems.next)).search : null;
-      const previousParams = action.elems.previous ? (new URL(action.elems.previous)).search : null;
+      const nextParams = action.elems.next ? `${action.elems.next.split('?')[1]}` : null;
+      const previousParams = action.elems.previous
+        ? `${action.elems.previous.split('?')[1]}` : null;
       let pageSize;
       let pageCount;
       let pageNumber = 0;
@@ -55,39 +56,39 @@ const pagination = (nameSpace, state, action) => {
         let limit;
         let offset;
         if (action.elems.next) {
-          params = (new URL(action.elems.next)).searchParams;
-          limit = Number.parseInt(params.get('limit'), 10);
-          offset = Number.parseInt(params.get('offset'), 10);
+          params = nextParams.split('&');
+          const pairs = nextParams.split('&');
+          params = {};
+          pairs.forEach((pair) => {
+            const kv = pair.split('=');
+            params[kv[0]] = decodeURIComponent(kv[1] || '');
+          });
+          limit = Number.parseInt(params.limit, 10);
+          offset = Number.parseInt(params.offset, 10);
           pageNumber = (offset - limit) / limit;
         } else {
-          params = (new URL(action.elems.previous)).searchParams;
-          limit = Number.parseInt(params.get('limit'), 10);
-          offset = params.get('offset') ? Number.parseInt(params.get('offset'), 10) : 0;
+          params = previousParams.split('&');
+          const pairs = previousParams.split('&');
+          params = {};
+          pairs.forEach((pair) => {
+            const kv = pair.split('=');
+            params[kv[0]] = decodeURIComponent(kv[1] || '');
+          });
+          limit = Number.parseInt(params.limit, 10);
+          offset = params.offset ? Number.parseInt(params.offset, 10) : 0;
           pageNumber = (offset + limit) / limit;
         }
 
         pageSize = limit;
         pageCount = Math.ceil(action.elems.count / pageSize);
-
-
-        const paramsObj = {};
-        params.forEach((value, key) => {
-          if (key === 'q') {
-            // q=gold AND silver becomes q=gold+AND+silver which is correct
-            paramsObj[key] = value.split(' ').join('+');
-          } else {
-            paramsObj[key] = value;
-          }
-        });
-        paramsObj.offset = paramsObj.offset || offset;
-
+        params.offset = params.offset || offset;
 
         resultPages = [...Array(pageCount).keys()].map((obj, i) => {
           return Object.assign({}, {
             pageNumber: i,
             active: i === pageNumber,
-            params: Object.keys(paramsObj).map((key, j) => {
-              return `${j === 0 ? '?' : ''}${key}=${key === 'offset' ? i * limit : paramsObj[key]}`;
+            params: Object.keys(params).map((key, j) => {
+              return `${j === 0 ? '?' : ''}${key}=${key === 'offset' ? i * limit : params[key]}`;
             }).join('&'),
           });
         });
@@ -105,13 +106,12 @@ const pagination = (nameSpace, state, action) => {
         resultPages = resultPages.slice(firstPage, lastPage);
       }
 
-
       return {
         count: action.elems.count,
         next: action.elems.next,
         previous: action.elems.previous,
-        nextParams,
-        previousParams,
+        nextParams: nextParams ? `?${nextParams}` : null,
+        previousParams: previousParams ? `?${previousParams}` : null,
         pageSize,
         pageCount,
         pageNumber,
