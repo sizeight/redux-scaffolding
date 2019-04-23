@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
-import { getCSRFToken, checkStatus, parseJSON } from './utils';
+import { getCSRFToken, checkStatus, parseJSON, shouldFetch } from './utils';
 
 import * as t from './actionTypes';
 
@@ -26,8 +26,9 @@ export const fetchFailure = nameSpace => ({
  * apiURL = e.g. http://www.example.com/api/v1/websites/
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
-export const fetchElems = (nameSpace, apiPath,
-  { queryParams = '', append = false, onErrorAction } = {}) => {
+export const fetchElems = (nameSpace, apiPath, {
+  queryParams = '', maxAgeInMinutes = 0, append = false, onErrorAction,
+} = {}) => {
   let queryString = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&');
   if (queryString) {
     queryString = `?${queryString}`;
@@ -35,33 +36,44 @@ export const fetchElems = (nameSpace, apiPath,
 
   const apiURL = `${process.env.API_URL}${apiPath}${queryString}`;
 
-  return (dispatch) => {
-    dispatch(fetchBusy(nameSpace));
-    return fetch(apiURL, {
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then(checkStatus)
-      .then(parseJSON)
-      .then(
-        (response) => {
-          dispatch(fetchSuccess(nameSpace, response, append));
-        },
-        (error) => {
-          dispatch(fetchFailure(nameSpace));
-          if (onErrorAction) {
-            dispatch(onErrorAction(error));
-          }
+  return (dispatch, getState) => {
+    let doFetch = true;
+    console.log(doFetch, maxAgeInMinutes);
+    if (maxAgeInMinutes > 0) {
+      console.log(doFetch);
+      doFetch = shouldFetch(getState()[nameSpace], maxAgeInMinutes);
+      console.log(doFetch);
+    }
 
-          // TODO: return the errors jsonResponse? or store in the elems state?
-          // Also with createUpdateElem & deleteElem
-          // return error.errorLogInfo.jsonResponse;
-          // OR
-          // dispatch(fetchFailure(nameSpace, error.errorLogInfo.jsonResponse));
+    if (doFetch) {
+      dispatch(fetchBusy(nameSpace));
+      return fetch(apiURL, {
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
         },
-      );
+      })
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(
+          (response) => {
+            dispatch(fetchSuccess(nameSpace, response, append));
+          },
+          (error) => {
+            dispatch(fetchFailure(nameSpace));
+            if (onErrorAction) {
+              dispatch(onErrorAction(error));
+            }
+
+            // TODO: return the errors jsonResponse? or store in the elems state?
+            // Also with createUpdateElem & deleteElem
+            // return error.errorLogInfo.jsonResponse;
+            // OR
+            // dispatch(fetchFailure(nameSpace, error.errorLogInfo.jsonResponse));
+          },
+        );
+    }
+    return Promise.resolve();
   };
 };
 

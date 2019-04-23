@@ -212,6 +212,66 @@ describe('actions -> reduxBaseElem (async)', () => {
   });
 
 
+  it('fetchElems() -> With maxAgeInMinutes = 5 mins and refetch NOT required, Success', () => {
+    const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
+    const maxAgeInMinutes = 5;
+    const response = [
+      { id: 15 },
+      { id: 18 },
+    ];
+    nock(process.env.API_URL)
+      .get(apiPathAlt)
+      .reply(200, response);
+
+    const expectedActions = [];
+    const store = mockStore({
+      posts: {
+        isFetching: false,
+        lastUpdated: Date.now(),
+        didInvalidate: false,
+      },
+    });
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { maxAgeInMinutes }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+  it('fetchElems() -> With maxAgeInMinutes = 5 mins and refetch IS required, Success', () => {
+    const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
+    const maxAgeInMinutes = 5;
+    const response = [
+      { id: 15 },
+      { id: 18 },
+    ];
+    nock(process.env.API_URL)
+      .get(apiPathAlt)
+      .reply(200, response);
+
+    const expectedActions = [
+      { type: 'posts/FETCH_BUSY' },
+      {
+        type: 'posts/FETCH_SUCCESS',
+        elems: response,
+        append: false,
+      },
+    ];
+    const store = mockStore({
+      posts: {
+        isFetching: false,
+        lastUpdated: Date.now() - 300001,
+        didInvalidate: false,
+      },
+    });
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { maxAgeInMinutes }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+
   it('fetchElems() -> camelCase nameSpace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const apiPathAlt = '/api/v1/subscriptionterms/';

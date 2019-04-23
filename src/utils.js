@@ -85,3 +85,33 @@ export const upToDate = (obj) => {
 export const upToDateButFetching = (obj) => {
   return obj && !obj.didInvalidate && obj.lastUpdated !== undefined;
 };
+
+
+/*
+ * Return a boolean indicating whether an object has to be fetched.
+ */
+export function shouldFetch(state, maxAgeInMinutes = 5) {
+  // Shorter refetch period of 10 second in development mode
+  let maxCacheAgeInMiliseconds = maxAgeInMinutes * 60000; // 5 Minutes
+  if (process.env.NODE_ENV !== 'production') {
+    maxCacheAgeInMiliseconds = maxAgeInMinutes * 1000; // 10 seconds = 1000 * 10
+  }
+
+  if (!state) {
+    return true;
+  }
+
+  if (state.isFetching) {
+    return false;
+  }
+
+  if (!state.lastUpdated) {
+    return true;
+  }
+
+  if (state.lastUpdated <= Date.now() - maxCacheAgeInMiliseconds) {
+    return true;
+  }
+
+  return state.didInvalidate;
+}
