@@ -162,6 +162,56 @@ describe('actions -> reduxBaseElem (async)', () => {
   });
 
 
+  it('fetchElems() -> With onErrorAction, Success', () => {
+    const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
+    const onErrorAction = { type: 'SOME_ACTION' };
+    const response = [
+      { id: 15 },
+      { id: 18 },
+    ];
+    nock(process.env.API_URL)
+      .get(apiPathAlt)
+      .reply(200, response);
+
+    const expectedActions = [
+      { type: 'posts/FETCH_BUSY' },
+      {
+        type: 'posts/FETCH_SUCCESS',
+        elems: response,
+        append: false,
+      },
+    ];
+    const store = mockStore({});
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { onErrorAction }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+  it('fetchElems() -> With onErrorAction, Failure', () => {
+    const nameSpaceAlt = 'posts';
+    const apiPathAlt = '/api/v1/posts/';
+    const onErrorAction = () => {
+      return { type: 'SOME_ACTION' };
+    };
+    nock(process.env.API_URL)
+      .get(apiPathAlt)
+      .reply(500);
+
+    const expectedActions = [
+      { type: 'posts/FETCH_BUSY' },
+      { type: 'posts/FETCH_FAILURE' },
+      { type: 'SOME_ACTION' },
+    ];
+    const store = mockStore({});
+    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { onErrorAction }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+
   it('fetchElems() -> camelCase nameSpace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const apiPathAlt = '/api/v1/subscriptionterms/';
