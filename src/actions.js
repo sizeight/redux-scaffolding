@@ -1,6 +1,8 @@
 import fetch from 'isomorphic-fetch';
 
-import { getCSRFToken, checkStatus, parseJSON, shouldFetch } from './utils';
+import {
+  getCSRFToken, checkStatus, parseJSON, shouldFetch,
+} from './utils';
 
 import * as t from './actionTypes';
 
@@ -38,11 +40,8 @@ export const fetchElems = (nameSpace, apiPath, {
 
   return (dispatch, getState) => {
     let doFetch = true;
-    console.log(doFetch, maxAgeInMinutes);
     if (maxAgeInMinutes > 0) {
-      console.log(doFetch);
       doFetch = shouldFetch(getState()[nameSpace], maxAgeInMinutes);
-      console.log(doFetch);
     }
 
     if (doFetch) {
