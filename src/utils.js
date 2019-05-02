@@ -71,20 +71,30 @@ export const parseJSON = (response) => {
     });
 };
 
-/* TODO: Test
- * Return true if the object is up to date.
- */
-export const upToDate = (obj) => {
-  // TODO: check the age of object is fresh
-  return obj && !obj.isFetching && !obj.didInvalidate && obj.lastUpdated !== undefined;
-};
 
-/* TODO: Test
- * Return true if the object is up to date, even if a new object is busy being fetched.
+/*
+ * Return true if fetching is complete and a valid elems in store.
  */
-export const upToDateButFetching = (obj) => {
+export function fetchingComplete(obj) {
+  return obj && !obj.isFetching && !obj.didInvalidate && obj.lastUpdated !== undefined;
+}
+
+/*
+ * Return true if valid elems in store
+ */
+export function upToDate(obj) {
   return obj && !obj.didInvalidate && obj.lastUpdated !== undefined;
-};
+}
+
+/* NOT USED YET
+ * Return true if busy fetching, but valid elems in store.
+ */
+/*
+export function upToDateButFetching(obj) {
+  return obj && obj.isFetching === true && obj.didInvalidate === false
+    && obj.lastUpdated !== undefined;
+}
+*/
 
 
 /*

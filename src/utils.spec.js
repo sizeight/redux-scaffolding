@@ -1,6 +1,8 @@
 import expect from 'expect';
 
-import { shouldFetch } from './utils';
+import {
+  fetchingComplete, upToDate, upToDateButFetching, shouldFetch,
+} from './utils';
 
 
 describe('Utils', () => {
@@ -76,5 +78,65 @@ describe('Utils', () => {
     };
     const expectedResult = true;
     expect(shouldFetch(state, 15)).toEqual(expectedResult);
+  });
+
+
+  it('fetchingComplete(): Not fetching and no valid elems in store', () => {
+    const state = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: undefined,
+    };
+    const expectedResult = false;
+    expect(fetchingComplete(state)).toEqual(expectedResult);
+  });
+
+  it('fetchingComplete(): Not fetching and valid elems in store.', () => {
+    const state = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+    };
+    const expectedResult = true;
+    expect(fetchingComplete(state)).toEqual(expectedResult);
+  });
+
+  it('fetchingComplete(): Fetching and no valid elems in store', () => {
+    const state = {
+      isFetching: true,
+      didInvalidate: false,
+      lastUpdated: undefined,
+    };
+    const expectedResult = false;
+    expect(fetchingComplete(state)).toEqual(expectedResult);
+  });
+
+  it('fetchingComplete(): Fetching and valid elems in store.', () => {
+    const state = {
+      isFetching: true,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+    };
+    const expectedResult = false;
+    expect(fetchingComplete(state)).toEqual(expectedResult);
+  });
+
+
+  it('upToDate(): No valid elems in store', () => {
+    const state = {
+      didInvalidate: false,
+      lastUpdated: undefined,
+    };
+    const expectedResult = false;
+    expect(upToDate(state)).toEqual(expectedResult);
+  });
+
+  it('upToDate(): Valid elems in store.', () => {
+    const state = {
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+    };
+    const expectedResult = true;
+    expect(upToDate(state)).toEqual(expectedResult);
   });
 });

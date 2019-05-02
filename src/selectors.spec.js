@@ -2,9 +2,9 @@ import expect from 'expect';
 import rewire from 'rewire';
 
 import {
-  getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getElems, getElemToUpdate,
-  getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection, getPagination, getExtraInfo,
-  getTotalElemCount, getFilteredElemCount,
+  getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getUpToDate, getElems,
+  getElemToUpdate, getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection, getPagination,
+  getExtraInfo, getTotalElemCount, getFilteredElemCount,
 } from './selectors';
 
 // Selector functions not exported need to be rewired to test
@@ -652,7 +652,7 @@ describe('selectors -> reduxBaseElem', () => {
   });
 
 
-  it('getElems() -> fetching complete', () => {
+  it('getElems() -> Fetching complete', () => {
     const stateElems = {
       isFetching: false,
       didInvalidate: false,
@@ -681,7 +681,7 @@ describe('selectors -> reduxBaseElem', () => {
   });
 
 
-  it('getFetchingComplete() -> fetching complete', () => {
+  it('getFetchingComplete() -> Fetching complete', () => {
     const elems = {
       isFetching: false,
       didInvalidate: false,
@@ -691,7 +691,7 @@ describe('selectors -> reduxBaseElem', () => {
     expect(getFetchingComplete(elems)).toEqual(derivedData);
   });
 
-  it('getFetchingComplete() -> fetching not complete', () => {
+  it('getFetchingComplete() -> Fetching not complete', () => {
     const invites = {
       isFetching: true,
       didInvalidate: false,
@@ -699,6 +699,37 @@ describe('selectors -> reduxBaseElem', () => {
     };
     const derivedData = false;
     expect(getFetchingComplete(invites)).toEqual(derivedData);
+  });
+
+
+  it('getUpToDate() -> Fetching complete', () => {
+    const elems = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+    };
+    const derivedData = true;
+    expect(getUpToDate(elems)).toEqual(derivedData);
+  });
+
+  it('getUpToDate() -> Fetching complete, didInvalidate', () => {
+    const elems = {
+      isFetching: false,
+      didInvalidate: true,
+      lastUpdated: Date.now(),
+    };
+    const derivedData = false;
+    expect(getUpToDate(elems)).toEqual(derivedData);
+  });
+
+  it('getUpToDate() -> Not updated yet', () => {
+    const elems = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: undefined,
+    };
+    const derivedData = false;
+    expect(getUpToDate(elems)).toEqual(derivedData);
   });
 
 

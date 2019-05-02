@@ -1,7 +1,7 @@
 /*
  * Reusable selector functions
  */
-import { upToDate } from './utils';
+import { fetchingComplete, upToDate } from './utils';
 
 
 export const getStateElems = (nameSpace, state) => state[nameSpace];
@@ -120,7 +120,17 @@ export const getElems = (stateElems) => {
   return elems;
 };
 
+/*
+ * Return true if not busy fetching and lastUpdated is valid time stamp.
+ */
 export const getFetchingComplete = (stateElems) => {
+  return fetchingComplete(stateElems);
+};
+
+/*
+ * Return true if lastUpdated is valid time stamp and didInvalidate not true.
+ */
+export const getUpToDate = (stateElems) => {
   return upToDate(stateElems);
 };
 
