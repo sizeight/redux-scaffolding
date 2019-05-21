@@ -290,6 +290,9 @@ describe('reducer -> reduxBaseElem', () => {
         count: 115, // Number of results
         next: 'http://www.xyz.com/api/v1/search/?q=gold+AND+silver&limit=10&offset=10',
         previous: null,
+        queryParams: {
+          q: 'gold+AND+silver',
+        },
         nextQueryParamsString: '?q=gold+AND+silver&limit=10&offset=10',
         nextQueryParams: {
           q: 'gold+AND+silver',
@@ -460,6 +463,9 @@ describe('reducer -> reduxBaseElem', () => {
         count: 12, // Number of results
         next: null,
         previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10',
+        queryParams: {
+          q: 'gold',
+        },
         nextQueryParamsString: null,
         nextQueryParams: null,
         previousQueryParamsString: '?q=gold&limit=10',
@@ -672,6 +678,9 @@ describe('reducer -> reduxBaseElem', () => {
         count: 35,
         next: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=20',
         previous: 'http://www.xyz.com/api/v1/search/?q=gold&limit=10&offset=0',
+        queryParams: {
+          q: 'gold',
+        },
         nextQueryParamsString: '?q=gold&limit=10&offset=20',
         nextQueryParams: {
           q: 'gold',

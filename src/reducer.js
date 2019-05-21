@@ -51,6 +51,7 @@ const pagination = (nameSpace, state, action) => {
       let resultPages = [];
 
       // new
+      let query = null;
       let nextQueryParams = null;
       let previousQueryParams = null;
 
@@ -119,12 +120,17 @@ const pagination = (nameSpace, state, action) => {
         const lastPage = pageNumber + pagesShownToRight;
 
         resultPages = resultPages.slice(firstPage, lastPage);
+
+        query = params.q || null;
       }
 
       return {
         count: action.elems.count,
         next: action.elems.next,
         previous: action.elems.previous,
+        queryParams: {
+          q: query,
+        },
         nextQueryParamsString: nextQueryParamsString ? `?${nextQueryParamsString}` : null,
         nextQueryParams,
         previousQueryParamsString: previousQueryParamsString ? `?${previousQueryParamsString}` : null,
