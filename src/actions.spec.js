@@ -9,7 +9,6 @@ import {
   setUpdateId, updateSuccess, createUpdateElem, setUpdateBusyId,
   deleteElem, setDeleteBusyId,
   setFilterValue, setSortKey,
-  fetchNoRedux,
 } from './actions';
 
 
@@ -24,6 +23,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   afterEach(() => {
     nock.cleanAll();
   });
+
 
   it('fetchElems() -> No queryParams, Success', () => {
     const response = [
