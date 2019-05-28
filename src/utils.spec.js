@@ -1,7 +1,8 @@
 import expect from 'expect';
+import nock from 'nock';
 
 import {
-  fetchingComplete, upToDate, upToDateButFetching, shouldFetch,
+  fetchingComplete, upToDate, shouldFetch, fetchCheckAndParse,
 } from './utils';
 
 
@@ -138,5 +139,51 @@ describe('Utils', () => {
     };
     const expectedResult = true;
     expect(upToDate(state)).toEqual(expectedResult);
+  });
+});
+
+
+describe('Utils -> async', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('fetchCheckAndParse) -> Success', () => {
+    const apiPath2 = '/api/v1/someaction/';
+    const response = { a: 1, b: 2 };
+    nock(process.env.API_URL)
+      .get(apiPath2)
+      .reply(200, response);
+
+    return fetchCheckAndParse('/api/v1/someaction/')
+      .then((resp) => {
+        expect(resp).toEqual(response);
+      });
+  });
+
+  it('fetchCheckAndParse() -> Failure 403 Forbidden', () => {
+    const apiPath2 = '/api/v1/someaction/';
+    const error = new Error('Forbidden');
+    nock(process.env.API_URL)
+      .get(apiPath2)
+      .reply(403, '');
+
+    return fetchCheckAndParse('/api/v1/someaction/')
+      .then((resp) => {
+        expect(resp).toEqual(error);
+      });
+  });
+
+  it('fetchCheckAndParse() -> Failure 500 Internal server error', () => {
+    const apiPath2 = '/api/v1/someaction/';
+    const error = new Error('Internal Server Error');
+    nock(process.env.API_URL)
+      .get(apiPath2)
+      .reply(500, '');
+
+    return fetchCheckAndParse('/api/v1/someaction/')
+      .then((resp) => {
+        expect(resp).toEqual(error);
+      });
   });
 });

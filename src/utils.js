@@ -125,3 +125,21 @@ export function shouldFetch(state, maxAgeInMinutes = 5) {
 
   return state.didInvalidate;
 }
+
+/*
+ * Fetch API Path, check the status and parse the results.
+ */
+export function fetchCheckAndParse(apiPath) {
+  const apiURL = `${process.env.API_URL}${apiPath}`;
+  return fetch(apiURL)
+    .then(checkStatus)
+    .then(parseJSON)
+    .then(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        return error;
+      },
+    );
+}
