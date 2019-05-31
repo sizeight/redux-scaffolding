@@ -144,18 +144,21 @@ describe('Utils', () => {
 
 
 describe('Utils -> async', () => {
+  const apiHostname = 'https://www.example.com';
+  const apiPath = '/api/v1/someaction/';
+  const apiURL = `${apiHostname}${apiPath}`;
+
   afterEach(() => {
     nock.cleanAll();
   });
 
   it('fetchCheckAndParse) -> Success', () => {
-    const apiPath2 = '/api/v1/someaction/';
     const response = { a: 1, b: 2 };
-    nock(process.env.API_URL)
-      .get(apiPath2)
+    nock(apiHostname)
+      .get(apiPath)
       .reply(200, response);
 
-    return fetchCheckAndParse('/api/v1/someaction/')
+    return fetchCheckAndParse(apiURL)
       .then((resp) => {
         expect(resp).toEqual(response);
       });
@@ -164,11 +167,11 @@ describe('Utils -> async', () => {
   it('fetchCheckAndParse() -> Failure 403 Forbidden', () => {
     const apiPath2 = '/api/v1/someaction/';
     const error = new Error('Forbidden');
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPath2)
       .reply(403, '');
 
-    return fetchCheckAndParse('/api/v1/someaction/')
+    return fetchCheckAndParse(apiURL)
       .then((resp) => {
         expect(resp).toEqual(error);
       });
@@ -177,11 +180,11 @@ describe('Utils -> async', () => {
   it('fetchCheckAndParse() -> Failure 500 Internal server error', () => {
     const apiPath2 = '/api/v1/someaction/';
     const error = new Error('Internal Server Error');
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPath2)
       .reply(500, '');
 
-    return fetchCheckAndParse('/api/v1/someaction/')
+    return fetchCheckAndParse(apiURL)
       .then((resp) => {
         expect(resp).toEqual(error);
       });

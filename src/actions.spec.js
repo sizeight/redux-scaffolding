@@ -17,7 +17,9 @@ const mockStore = configureMockStore(middlewares);
 
 
 const nameSpace = 'websites'; // nameSpace used for testing
+const apiHostname = 'https://www.example.com';
 const apiPath = '/api/v1/websites/';
+const apiURL = `${apiHostname}${apiPath}`;
 
 describe('actions -> reduxBaseElem (async)', () => {
   afterEach(() => {
@@ -30,7 +32,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPath)
       .reply(200, response);
 
@@ -39,14 +41,14 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'websites/FETCH_SUCCESS', elems: response, append: false },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpace, apiPath))
+    return store.dispatch(fetchElems(nameSpace, apiURL))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });
 
   it('fetchElems() -> No queryParams, Failure', () => {
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPath)
       .reply(500, '');
 
@@ -55,7 +57,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'websites/FETCH_FAILURE' },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpace, apiPath))
+    return store.dispatch(fetchElems(nameSpace, apiURL))
       .then(() => {
         expect(store.getActions()).toMatchObject(expectedActions);
       });
@@ -65,6 +67,8 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With queryParams, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiPathAltWithQueryParams = `${apiPathAlt}?page=10&slug=extra_content`;
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const queryParams = {
       page: 10,
       slug: 'extra_content',
@@ -73,8 +77,8 @@ describe('actions -> reduxBaseElem (async)', () => {
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
-      .get(`${apiPathAlt}?page=10&slug=extra_content`)
+    nock(apiHostname)
+      .get(apiPathAltWithQueryParams)
       .reply(200, response);
 
     const expectedActions = [
@@ -82,7 +86,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_SUCCESS', elems: response, append: false },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { queryParams }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -91,12 +95,14 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With queryParams, Failure', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiPathAltWithQueryParams = `${apiPathAlt}?page=10&slug=extra_content`;
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const queryParams = {
       page: 10,
       slug: 'extra_content',
     };
-    nock(process.env.API_URL)
-      .get(`${apiPathAlt}?page=10&slug=extra_content`)
+    nock(apiHostname)
+      .get(apiPathAltWithQueryParams)
       .reply(500, '');
 
     const expectedActions = [
@@ -104,7 +110,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_FAILURE' },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { queryParams }))
       .then(() => {
         expect(store.getActions()).toMatchObject(expectedActions);
       });
@@ -114,12 +120,13 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With append = true, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const append = true;
     const response = [
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPathAlt)
       .reply(200, response);
 
@@ -128,7 +135,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_SUCCESS', elems: response, append: true },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { append }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { append }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -137,6 +144,8 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With queryParams and append = true, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiPathAltWithQueryParams = `${apiPathAlt}?page=10&slug=extra_content`;
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const queryParams = {
       page: 10,
       slug: 'extra_content',
@@ -146,8 +155,8 @@ describe('actions -> reduxBaseElem (async)', () => {
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
-      .get(`${apiPathAlt}?page=10&slug=extra_content`)
+    nock(apiHostname)
+      .get(apiPathAltWithQueryParams)
       .reply(200, response);
 
     const expectedActions = [
@@ -155,7 +164,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'posts/FETCH_SUCCESS', elems: response, append: true },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { queryParams, append }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { queryParams, append }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -165,12 +174,13 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With onErrorAction, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const onErrorAction = { type: 'SOME_ACTION' };
     const response = [
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPathAlt)
       .reply(200, response);
 
@@ -183,7 +193,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { onErrorAction }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { onErrorAction }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -192,10 +202,11 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With onErrorAction, Failure', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiURLAlt = `${apiHostname}/api/v1/posts/`;
     const onErrorAction = () => {
       return { type: 'SOME_ACTION' };
     };
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPathAlt)
       .reply(500);
 
@@ -215,12 +226,13 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With maxAgeInMinutes = 5 mins and refetch NOT required, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const maxAgeInMinutes = 5;
     const response = [
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPathAlt)
       .reply(200, response);
 
@@ -232,7 +244,7 @@ describe('actions -> reduxBaseElem (async)', () => {
         didInvalidate: false,
       },
     });
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { maxAgeInMinutes }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { maxAgeInMinutes }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -241,12 +253,13 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> With maxAgeInMinutes = 5 mins and refetch IS required, Success', () => {
     const nameSpaceAlt = 'posts';
     const apiPathAlt = '/api/v1/posts/';
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const maxAgeInMinutes = 5;
     const response = [
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPathAlt)
       .reply(200, response);
 
@@ -265,7 +278,7 @@ describe('actions -> reduxBaseElem (async)', () => {
         didInvalidate: false,
       },
     });
-    return store.dispatch(fetchElems(nameSpaceAlt, apiPathAlt, { maxAgeInMinutes }))
+    return store.dispatch(fetchElems(nameSpaceAlt, apiURLAlt, { maxAgeInMinutes }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -275,11 +288,12 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('fetchElems() -> camelCase nameSpace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const apiPathAlt = '/api/v1/subscriptionterms/';
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const response = [
       { id: 15 },
       { id: 18 },
     ];
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .get(apiPathAlt)
       .reply(200, response);
 
@@ -288,7 +302,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       { type: 'subscriptionTerms/FETCH_SUCCESS', elems: response, append: false },
     ];
     const store = mockStore({});
-    return store.dispatch(fetchElems(camelCaseNameSpace, apiPathAlt))
+    return store.dispatch(fetchElems(camelCaseNameSpace, apiURLAlt))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -297,7 +311,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('createUpdateElem() -> CREATE Success', () => {
     const data = { title: 'New website' };
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .post(apiPath, data)
       // .post(apiPath, body => body === '[object FormData]')
       .reply(201, { id: 16 });
@@ -310,7 +324,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, apiPath, data))
+    return store.dispatch(createUpdateElem(nameSpace, apiURL, data))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -318,14 +332,14 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('createUpdateElem() -> CREATE Failure', () => {
     const data = { title: 'New website' };
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .post(apiPath, data)
       // .post(apiPath, body => body === '[object FormData]')
       .reply(500, {});
 
     const expectedActions = [];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, apiPath, data))
+    return store.dispatch(createUpdateElem(nameSpace, apiURL, data))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -335,7 +349,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> UPDATE Success', () => {
     const id = 15;
     const data = { title: 'Changed title' };
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .patch(`${apiPath}${id}/`, data)
       // .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(200, { id: 15 });
@@ -358,7 +372,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, apiPath, data, id))
+    return store.dispatch(createUpdateElem(nameSpace, apiURL, data, id))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -367,7 +381,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> UPDATE Failure', () => {
     const id = 15;
     const data = { title: 'Changed title' };
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .patch(`${apiPath}${id}/`, data)
       // .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(500, {});
@@ -385,7 +399,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, apiPath, data, 15))
+    return store.dispatch(createUpdateElem(nameSpace, apiURL, data, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -395,7 +409,7 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('createUpdateElem() -> File in data should be sent as multipart/form-data', () => {
     const id = 15;
     const data = { title: 'New term', file: { name: 'newfile.jpg' } };
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .patch(`${apiPath}${id}/`, body => body === '[object FormData]')
       .reply(201, { id: 15 });
 
@@ -417,7 +431,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(createUpdateElem(nameSpace, apiPath, data, 15))
+    return store.dispatch(createUpdateElem(nameSpace, apiURL, data, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -425,7 +439,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('deleteElem() -> DELETE Success', () => {
     const id = 15;
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .delete(`${apiPath}${id}/`)
       .reply(204);
 
@@ -447,7 +461,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(deleteElem(nameSpace, apiPath, 15))
+    return store.dispatch(deleteElem(nameSpace, apiURL, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -455,7 +469,7 @@ describe('actions -> reduxBaseElem (async)', () => {
 
   it('deleteElem() -> DELETE Failures', () => {
     const id = 15;
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .delete(`${apiPath}${id}/`)
       .reply(500, {});
 
@@ -472,7 +486,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(deleteElem(nameSpace, apiPath, 15))
+    return store.dispatch(deleteElem(nameSpace, apiURL, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -482,8 +496,9 @@ describe('actions -> reduxBaseElem (async)', () => {
   it('deleteElem() -> camelCase nameSPace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';
     const apiPathAlt = '/api/v1/subscriptionterms/';
+    const apiURLAlt = `${apiHostname}${apiPathAlt}`;
     const id = 15;
-    nock(process.env.API_URL)
+    nock(apiHostname)
       .delete(`${apiPathAlt}${id}/`)
       .reply(204);
 
@@ -505,7 +520,7 @@ describe('actions -> reduxBaseElem (async)', () => {
       },
     ];
     const store = mockStore({});
-    return store.dispatch(deleteElem(camelCaseNameSpace, apiPathAlt, 15))
+    return store.dispatch(deleteElem(camelCaseNameSpace, apiURLAlt, 15))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

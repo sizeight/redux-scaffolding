@@ -14,7 +14,7 @@
   "author": "Herman Pretorius (https://github.com/sizeight)",
   "scripts": {
     "test": "mocha --recursive './src/**/*.spec.js' --require @babel/register --require ./src/setup.js",
-    "test:watch": "NODE_PATH=./src/ API_URL='http://127.0.0.1:8000' yarn test --watch",
+    "test:watch": "NODE_PATH=./src/ yarn test --watch",
     "webpack-dev": "webpack --watch --progress --color",
     "webpack-prod-analyse": "NODE_ENV=production ANALYSE=true webpack --watch --progress --color",
     "webpack-prod": "NODE_ENV=production webpack --progress --color",

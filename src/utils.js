@@ -23,7 +23,7 @@ export const checkStatus = (response) => {
     error.notificationId = '400_BAD_REQUEST';
   } else if (error.response.status === 403) {
     // 403 Forbidden
-    error.notificationId = '403_FFORBIDDEN';
+    error.notificationId = '403_FORBIDDEN';
   } else if (error.response.status === 404) {
     // 404 Not Found
     error.notificationId = '404_NOT_FOUND ';
@@ -129,8 +129,7 @@ export function shouldFetch(state, maxAgeInMinutes = 5) {
 /*
  * Fetch API Path, check the status and parse the results.
  */
-export function fetchCheckAndParse(apiPath) {
-  const apiURL = `${process.env.API_URL}${apiPath}`;
+export function fetchCheckAndParse(apiURL) {
   return fetch(apiURL)
     .then(checkStatus)
     .then(parseJSON)

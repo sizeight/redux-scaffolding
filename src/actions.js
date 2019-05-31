@@ -28,7 +28,7 @@ export const fetchFailure = nameSpace => ({
  * apiURL = e.g. http://www.example.com/api/v1/websites/
  * qeuryParams = e.g. ?page=12&slug=extra_content
  */
-export const fetchElems = (nameSpace, apiPath, {
+export const fetchElems = (nameSpace, apiURL, {
   queryParams = '', maxAgeInMinutes = 0, append = false, onErrorAction,
 } = {}) => {
   let queryString = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&');
@@ -36,7 +36,7 @@ export const fetchElems = (nameSpace, apiPath, {
     queryString = `?${queryString}`;
   }
 
-  const apiURL = `${process.env.API_URL}${apiPath}${queryString}`;
+  const apiURLWithQueryParams = `${apiURL}${queryString}`;
 
   return (dispatch, getState) => {
     let doFetch = true;
@@ -46,7 +46,7 @@ export const fetchElems = (nameSpace, apiPath, {
 
     if (doFetch) {
       dispatch(fetchBusy(nameSpace));
-      return fetch(apiURL, {
+      return fetch(apiURLWithQueryParams, {
         credentials: 'include',
         headers: {
           Accept: 'application/json',
@@ -98,10 +98,10 @@ export const setUpdateBusyId = (nameSpace, id, busy) => ({
   busy,
 });
 
-export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
-  const apiURL = id === -1
-    ? `${process.env.API_URL}${apiPath}`
-    : `${process.env.API_URL}${apiPath}${id}/`;
+export const createUpdateElem = (nameSpace, apiURL, data, id = -1) => {
+  const apiURLWithId = id === -1
+    ? apiURL
+    : `${apiURL}${id}/`;
   const isUpdate = id > -1;
 
   // Do we have a file as payload? If so send multipart/form-data
@@ -137,7 +137,7 @@ export const createUpdateElem = (nameSpace, apiPath, data, id = -1) => {
     if (isUpdate) {
       dispatch(setUpdateBusyId(nameSpace, id, true));
     }
-    return fetch(apiURL, {
+    return fetch(apiURLWithId, {
       method: isUpdate ? 'PATCH' : 'POST',
       credentials: 'include',
       headers,
@@ -169,12 +169,12 @@ export const setDeleteBusyId = (nameSpace, id, busy) => ({
   busy,
 });
 
-export const deleteElem = (nameSpace, apiPath, id) => {
-  const apiURL = `${process.env.API_URL}${apiPath}${id}/`;
+export const deleteElem = (nameSpace, apiURL, id) => {
+  const apiURLWithId = `${apiURL}${id}/`;
 
   return (dispatch) => {
     dispatch(setDeleteBusyId(nameSpace, id, true));
-    return fetch(apiURL, {
+    return fetch(apiURLWithId, {
       method: 'DELETE',
       credentials: 'include',
       headers: {

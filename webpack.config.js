@@ -13,8 +13,6 @@ const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(nodeEnv),
-      API_URL: isProduction
-        ? JSON.stringify('') : JSON.stringify('http://127.0.0.1:8000'),
     },
   }),
 ];
