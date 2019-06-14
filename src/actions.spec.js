@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 
 import {
-  fetchBusy, fetchSuccess, fetchFailure, fetchElems,
+  fetchBusy, fetchSuccess, fetchFailure, fetchElems, resetState,
   setUpdateId, updateSuccess, createUpdateElem, setUpdateBusyId,
   deleteElem, setDeleteBusyId,
   setFilterValue, setSortKey,
@@ -551,6 +551,14 @@ describe('actions -> reduxBaseElem', () => {
       type: 'websites/FETCH_FAILURE',
     };
     expect(fetchFailure(nameSpace)).toEqual(expectedAction);
+  });
+
+
+  it('resetState', () => {
+    const expectedAction = {
+      type: 'websites/RESET_STATE',
+    };
+    expect(resetState(nameSpace)).toEqual(expectedAction);
   });
 
 

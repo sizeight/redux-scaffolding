@@ -76,6 +76,9 @@ export const fetchElems = (nameSpace, apiURL, {
   };
 };
 
+export const resetState = nameSpace => ({
+  type: `${nameSpace}${t.RESET_STATE}`,
+});
 
 // Updating
 export const setUpdateId = (nameSpace, id = -1) => ({

@@ -219,6 +219,11 @@ export const elems = (nameSpace, state = initialState, action) => {
         didInvalidate: true,
       });
 
+
+    case `${nameSpace}${t.RESET_STATE}`:
+      return initialState;
+
+
     case `${nameSpace}${t.SET_UPDATE_ID}`: {
       return Object.assign({}, state, {
         ...state,

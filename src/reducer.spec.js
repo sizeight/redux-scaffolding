@@ -762,6 +762,49 @@ describe('reducer -> reduxBaseElem', () => {
   });
 
 
+  it(`should handle ${nameSpace}/RESET_STATE`, () => {
+    const action = {
+      type: 'websites/RESET_STATE',
+    };
+    const stateBefore = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: undefined,
+      elems: [
+        { id: 1 },
+        { id: 2 },
+      ],
+      filterOnFields: [],
+      responseElemsKey: undefined,
+      updateId: -1,
+      filterValue: 'alpha',
+      sortKey: null,
+      sortDirection: null,
+      pagination: {},
+      extraInfo: {},
+      updateBusyIds: [],
+      deleteBusyIds: [],
+    };
+    const stateAfter = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: undefined,
+      elems: [],
+      filterOnFields: [],
+      responseElemsKey: undefined,
+      updateId: -1,
+      filterValue: '',
+      sortKey: null,
+      sortDirection: null,
+      pagination: {},
+      extraInfo: {},
+      updateBusyIds: [],
+      deleteBusyIds: [],
+    };
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+
   it(`should handle ${nameSpace}/SET_UPDATE_ID -> true`, () => {
     const action = {
       type: 'websites/SET_UPDATE_ID',
