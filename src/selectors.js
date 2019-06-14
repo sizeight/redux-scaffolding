@@ -105,7 +105,9 @@ const getSortedElems = (elems, sortKey, sortDirection) => {
   return sortedElems;
 };
 
-
+/*
+ * Return all the elements taking into account the filter and sort that could be applied.
+ */
 export const getElems = (stateElems) => {
   let elems = [];
   if (upToDate(stateElems)) {
@@ -116,6 +118,17 @@ export const getElems = (stateElems) => {
 
     const { sortKey, sortDirection } = stateElems;
     elems = getSortedElems(elems, sortKey, sortDirection);
+  }
+  return elems;
+};
+
+/*
+ * Return all the elements ignoring the filter and sort criteria.
+ */
+export const getAllElems = (stateElems) => {
+  let elems = [];
+  if (upToDate(stateElems)) {
+    elems = stateElems.elems.slice();
   }
   return elems;
 };

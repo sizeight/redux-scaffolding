@@ -3,8 +3,8 @@ import rewire from 'rewire';
 
 import {
   getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getUpToDate, getElems,
-  getElemToUpdate, getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection, getPagination,
-  getExtraInfo, getTotalElemCount, getFilteredElemCount,
+  getAllElems, getElemToUpdate, getUpdateBusyIds, getDeleteBusyIds, getSortKey, getSortDirection,
+  getPagination, getExtraInfo, getTotalElemCount, getFilteredElemCount,
 } from './selectors';
 
 // Selector functions not exported need to be rewired to test
@@ -678,6 +678,76 @@ describe('selectors -> reduxBaseElem', () => {
       },
     ];
     expect(getElems(stateElems)).toEqual(derivedData);
+  });
+
+  it('getElems() -> Fetching complete, filter applied', () => {
+    const stateElems = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          filterString: 'alpha',
+        },
+        {
+          id: 2,
+          title: 'Beta',
+          filterString: 'beta',
+        },
+      ],
+      filterOnFields: ['title'],
+      filterValue: 'bet',
+      sortKey: null,
+      sortDirection: null,
+    };
+    const derivedData = [
+      {
+        id: 2,
+        title: 'Beta',
+        filterString: 'beta',
+      },
+    ];
+    expect(getElems(stateElems)).toEqual(derivedData);
+  });
+
+
+  it('getAllElems() -> Fetching complete, filter applied', () => {
+    const stateElems = {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: Date.now(),
+      elems: [
+        {
+          id: 1,
+          title: 'Alpha',
+          filterString: 'alpha',
+        },
+        {
+          id: 2,
+          title: 'Beta',
+          filterString: 'beta',
+        },
+      ],
+      filterOnFields: ['title'],
+      filterValue: 'bet',
+      sortKey: null,
+      sortDirection: null,
+    };
+    const derivedData = [
+      {
+        id: 1,
+        title: 'Alpha',
+        filterString: 'alpha',
+      },
+      {
+        id: 2,
+        title: 'Beta',
+        filterString: 'beta',
+      },
+    ];
+    expect(getAllElems(stateElems)).toEqual(derivedData);
   });
 
 
