@@ -1,9 +1,19 @@
 /*
- * Return the CSRF token.
+ * Return the CSRF token if found in cookies for logged in user, else return undefined.
+ *
+ * The csrftoken cookie is only applicable for logged in views. For instance, if a form is
+ * available on a public view, then the csrftoken will not be available in the browser cookies to
+ * send along with the POST request.
  */
 export const getCSRFToken = () => {
-  const CSRFToken = document.cookie.match(/csrftoken=(.*?)(?:$|;)/)[1];
-  return CSRFToken;
+  let csrftoken;
+  if (document.cookie) {
+    const found = document.cookie.match(/csrftoken=(.*?)(?:$|;)/);
+    if (found) {
+      csrftoken = found[1]; /* eslint-disable-line prefer-destructuring */
+    }
+  }
+  return csrftoken;
 };
 
 /*
