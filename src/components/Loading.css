@@ -1,0 +1,36 @@
+.redux-scaffolding-loader-wrapper {
+  padding: 10px 6px;
+}
+.redux-scaffolding-loader-center {
+  display: block;
+  text-align: center;
+}
+
+.redux-scaffolding-loader {
+  animation: spin 600ms linear infinite;
+  border-style: solid;
+  border-color: #eee;
+  border-top: 5px solid #333;
+  border-radius: 50%;
+  display: inline-block;
+}
+.redux-scaffolding-loader-size-1x {
+  border-width: 4px;
+  height: 40px;
+  width: 40px;
+}
+.redux-scaffolding-loader-size-2x {
+  border-width: 6px;
+  height: 60px;
+  width: 60px;
+}
+.redux-scaffolding-loader-size-3x {
+  border-width: 8px;
+  height: 80px;
+  width: 80px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
