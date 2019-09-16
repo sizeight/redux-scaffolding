@@ -142,7 +142,8 @@ export function shouldFetch(state, maxAgeInMinutes = 5) {
 export function fetchCheckAndParse(apiURL) {
   return fetch(apiURL)
     .then(checkStatus)
-    .then(parseJSON)
+    .then(parseJSON);
+  /*
     .then(
       (response) => {
         return response;
@@ -151,4 +152,5 @@ export function fetchCheckAndParse(apiURL) {
         return error;
       },
     );
+  */
 }
