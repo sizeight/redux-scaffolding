@@ -8,7 +8,7 @@ import * as t from './actionTypes';
 
 
 // Fetching
-export const fetchBusy = nameSpace => ({
+export const fetchBusy = (nameSpace) => ({
   type: `${nameSpace}${t.FETCH_BUSY}`, // e.g. tags/FETCH_BUSY
 });
 
@@ -18,7 +18,7 @@ export const fetchSuccess = (nameSpace, jsonResponse, append = false) => ({
   append,
 });
 
-export const fetchFailure = nameSpace => ({
+export const fetchFailure = (nameSpace) => ({
   type: `${nameSpace}${t.FETCH_FAILURE}`, // e.g. tags/FETCH_FAILURE
 });
 
@@ -31,7 +31,7 @@ export const fetchFailure = nameSpace => ({
 export const fetchElems = (nameSpace, apiURL, {
   queryParams = '', maxAgeInMinutes = 0, append = false, onErrorAction,
 } = {}) => {
-  let queryString = Object.keys(queryParams).map(key => `${key}=${queryParams[key]}`).join('&');
+  let queryString = Object.keys(queryParams).map((key) => `${key}=${queryParams[key]}`).join('&');
   if (queryString) {
     queryString = `?${queryString}`;
   }
@@ -76,7 +76,7 @@ export const fetchElems = (nameSpace, apiURL, {
   };
 };
 
-export const resetState = nameSpace => ({
+export const resetState = (nameSpace) => ({
   type: `${nameSpace}${t.RESET_STATE}`,
 });
 
@@ -121,15 +121,16 @@ export const createUpdateElem = (nameSpace, apiURL, data, id = -1) => {
   };
   if (!isMultipart) {
     body = JSON.stringify(data);
-    headers = Object.assign({}, headers, {
+    headers = {
+      ...headers,
       Accept: 'application/json',
       'Content-Type': 'application/json',
-    });
+    };
   } else {
     body = new window.FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach(val => body.append(key, val));
+        value.forEach((val) => body.append(key, val));
       } else {
         body.append(key, value);
       }

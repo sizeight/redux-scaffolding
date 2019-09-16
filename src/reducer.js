@@ -73,7 +73,7 @@ const pagination = (nameSpace, state, action) => {
           limit = Number.parseInt(nextQueryParams.limit, 10);
           offset = Number.parseInt(nextQueryParams.offset, 10);
           pageNumber = (offset - limit) / limit;
-          params = Object.assign({}, nextQueryParams);
+          params = { ...nextQueryParams };
         }
         if (action.elems.previous) {
           const pairs = previousQueryParamsString.split('&');
@@ -88,7 +88,7 @@ const pagination = (nameSpace, state, action) => {
           limit = Number.parseInt(previousQueryParams.limit, 10);
           offset = previousQueryParams.offset ? Number.parseInt(previousQueryParams.offset, 10) : 0;
           pageNumber = (offset + limit) / limit;
-          params = Object.assign({}, previousQueryParams);
+          params = { ...previousQueryParams };
         }
 
         pageSize = limit;
@@ -96,17 +96,18 @@ const pagination = (nameSpace, state, action) => {
         params.offset = params.offset || offset;
 
         resultPages = [...Array(pageCount).keys()].map((obj, i) => {
-          return Object.assign({}, {
+          return {
             pageNumber: i,
             active: i === pageNumber,
             queryParamsString: Object.keys(params).map((key, j) => {
               return `${j === 0 ? '?' : ''}${key}=${key === 'offset' ? i * limit : params[key]}`;
             }).join('&'),
-            queryParams: Object.assign({}, params, {
+            queryParams: {
+              ...params,
               limit: Number.parseInt(limit, 10),
               offset: i * limit,
-            }),
-          });
+            },
+          };
         });
 
         // Show at most 9 pages with active page in the middle if possible.
@@ -144,9 +145,10 @@ const pagination = (nameSpace, state, action) => {
     case `${nameSpace}${t.UPDATE_SUCCESS}`:
       // DELETE
       if (action.elem === undefined && state.count > 0) {
-        return Object.assign({}, state, {
+        return {
+          ...state,
           count: state.count - 1,
-        });
+        };
       }
       return state;
     default:
@@ -157,10 +159,10 @@ const pagination = (nameSpace, state, action) => {
 export const elems = (nameSpace, state = initialState, action) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_BUSY}`:
-      return Object.assign({}, state, {
+      return {
         ...state,
         isFetching: true,
-      });
+      };
     case `${nameSpace}${t.FETCH_SUCCESS}`: {
       let responseElems = [];
       let responsePagination = initialState.pagination;
@@ -174,16 +176,17 @@ export const elems = (nameSpace, state = initialState, action) => {
           if (key === state.responseElemsKey) {
             responseElems = action.elems[key].slice();
           } else {
-            responseExtraInfo = Object.assign({}, responseExtraInfo, {
+            responseExtraInfo = {
+              ...responseExtraInfo,
               [key]: action.elems[key],
-            });
+            };
           }
         });
 
         // ...and potential pagination
         // Store pagination info only if pagination keys are in response
-        if (keys.findIndex(x => x === 'count') > -1 && keys.findIndex(x => x === 'next') > -1
-          && keys.findIndex(x => x === 'previous') > -1) {
+        if (keys.findIndex((x) => x === 'count') > -1 && keys.findIndex((x) => x === 'next') > -1
+          && keys.findIndex((x) => x === 'previous') > -1) {
           responsePagination = pagination(nameSpace, state.pagination, action);
         }
       } else if (Array.isArray(action.elems)) {
@@ -196,12 +199,14 @@ export const elems = (nameSpace, state = initialState, action) => {
 
 
       const newElems = responseElems.map((elem) => {
-        return Object.assign({}, elem, {
+        return {
+          ...elem,
           filterString: getFilterString(state.filterOnFields, elem),
-        });
+        };
       });
 
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
         lastUpdated: Date.now(),
@@ -211,13 +216,14 @@ export const elems = (nameSpace, state = initialState, action) => {
         ] : newElems,
         pagination: responsePagination,
         extraInfo: responseExtraInfo,
-      });
+      };
     }
     case `${nameSpace}${t.FETCH_FAILURE}`:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: true,
-      });
+      };
 
 
     case `${nameSpace}${t.RESET_STATE}`:
@@ -225,50 +231,55 @@ export const elems = (nameSpace, state = initialState, action) => {
 
 
     case `${nameSpace}${t.SET_UPDATE_ID}`: {
-      return Object.assign({}, state, {
+      return {
         ...state,
         updateId: action.id,
-      });
+      };
     }
     case `${nameSpace}${t.UPDATE_SUCCESS}`: {
       // CREATE
       if (action.id === -1) {
-        return Object.assign({}, state, {
+        return {
+          ...state,
           elems: [
-            Object.assign({}, action.elem, {
+            {
+              ...action.elem,
               filterString: getFilterString(state.filterOnFields, action.elem),
-            }),
+            },
             ...state.elems,
           ],
-        });
+        };
       }
-      const idx = state.elems.findIndex(obj => obj.id === action.id);
+      const idx = state.elems.findIndex((obj) => obj.id === action.id);
       // DELETE
       if (action.elem === undefined) {
-        return Object.assign({}, state, {
+        return {
+          ...state,
           elems: [
             ...state.elems.slice(0, idx),
             ...state.elems.slice(idx + 1),
           ],
           pagination: pagination(nameSpace, state.pagination, action),
-        });
+        };
       }
       // UPDATE
-      return Object.assign({}, state, {
+      return {
+        ...state,
         elems: [
           ...state.elems.slice(0, idx),
-          Object.assign({}, action.elem, {
+          {
+            ...action.elem,
             filterString: getFilterString(state.filterOnFields, action.elem),
-          }),
+          },
           ...state.elems.slice(idx + 1),
         ],
-      });
+      };
     }
 
     case `${nameSpace}${t.SET_UPDATE_BUSY_ID}`: {
-      const idx = state.updateBusyIds.findIndex(x => x === action.id);
+      const idx = state.updateBusyIds.findIndex((x) => x === action.id);
 
-      return Object.assign({}, state, {
+      return {
         ...state,
         updateBusyIds: action.busy ? [
           ...state.updateBusyIds,
@@ -277,12 +288,12 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...state.updateBusyIds.slice(0, idx),
           ...state.updateBusyIds.slice(idx + 1),
         ],
-      });
+      };
     }
     case `${nameSpace}${t.SET_DELETE_BUSY_ID}`: {
-      const idx = state.deleteBusyIds.findIndex(x => x === action.id);
+      const idx = state.deleteBusyIds.findIndex((x) => x === action.id);
 
-      return Object.assign({}, state, {
+      return {
         ...state,
         deleteBusyIds: action.busy ? [
           ...state.deleteBusyIds,
@@ -291,14 +302,14 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...state.deleteBusyIds.slice(0, idx),
           ...state.deleteBusyIds.slice(idx + 1),
         ],
-      });
+      };
     }
 
     case `${nameSpace}${t.SET_FILTER_VALUE}`: {
-      return Object.assign({}, state, {
+      return {
         ...state,
         filterValue: action.value,
-      });
+      };
     }
 
     case `${nameSpace}${t.SET_SORT_KEY}`: {
@@ -317,11 +328,11 @@ export const elems = (nameSpace, state = initialState, action) => {
         }
       }
 
-      return Object.assign({}, state, {
+      return {
         ...state,
         sortKey: newSortKey,
         sortDirection: newSortDirection,
-      });
+      };
     }
     default:
       return state;

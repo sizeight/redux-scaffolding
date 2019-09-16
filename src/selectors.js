@@ -152,7 +152,7 @@ export const getElemToUpdate = (stateElems) => {
   if (upToDate(stateElems)) {
     const elems = stateElems.elems.slice();
     const { updateId } = stateElems;
-    elemToUpdate = elems.find(obj => obj.id === updateId);
+    elemToUpdate = elems.find((obj) => obj.id === updateId);
   }
   return elemToUpdate || {};
 };
