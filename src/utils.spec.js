@@ -152,7 +152,7 @@ describe('Utils -> async', () => {
     nock.cleanAll();
   });
 
-  it('fetchCheckAndParse) -> Success', () => {
+  it('fetchCheckAndParse() -> Success', () => {
     const response = { a: 1, b: 2 };
     nock(apiHostname)
       .get(apiPath)
@@ -172,9 +172,14 @@ describe('Utils -> async', () => {
       .reply(403, '');
 
     return fetchCheckAndParse(apiURL)
-      .then((resp) => {
-        expect(resp).toEqual(error);
-      });
+      .then(
+        (resp) => {
+          expect(resp).toEqual(error);
+        },
+        (respError) => {
+          expect(respError).toEqual(error);
+        },
+      );
   });
 
   it('fetchCheckAndParse() -> Failure 500 Internal server error', () => {
@@ -185,8 +190,13 @@ describe('Utils -> async', () => {
       .reply(500, '');
 
     return fetchCheckAndParse(apiURL)
-      .then((resp) => {
-        expect(resp).toEqual(error);
-      });
+      .then(
+        (resp) => {
+          expect(resp).toEqual(error);
+        },
+        (respError) => {
+          expect(respError).toEqual(error);
+        },
+      );
   });
 });
