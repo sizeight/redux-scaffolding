@@ -36,8 +36,8 @@ const propExists = (obj, sortKeys) => {
   return !!sortKeys.split('__').reduce(
     (ob, sortKey) => {
       if (ob && Object.prototype.hasOwnProperty.call(ob, sortKey)) {
-        if (ob[sortKey] === undefined || ob[sortKey] === null) {
-          // The property exists, but it has a value of undefined or null
+        if (ob[sortKey] === undefined || ob[sortKey] === null || ob[sortKey] === 0) {
+          // The property exists, but it has a value of undefined or null or 0
           return true;
         }
         return ob[sortKey];

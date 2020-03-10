@@ -651,6 +651,48 @@ describe('selectors -> reduxBaseElem', () => {
     expect(getSortedElems(elems, sortKey, sortDirection)).toEqual(derivedData);
   });
 
+  it('getSortedElems() -> values of 0', () => {
+    const sortKey = 'unique_logins_last_x_days';
+    const sortDirection = 'asc';
+    const elems = [
+      {
+        id: 3,
+        unique_logins_last_x_days: 0,
+      },
+      {
+        id: 1,
+        unique_logins_last_x_days: 0,
+      },
+      {
+        id: 4,
+        unique_logins_last_x_days: 0,
+      },
+      {
+        id: 2,
+        unique_logins_last_x_days: 0,
+      },
+    ];
+    const derivedData = [
+      {
+        id: 3,
+        unique_logins_last_x_days: 0,
+      },
+      {
+        id: 1,
+        unique_logins_last_x_days: 0,
+      },
+      {
+        id: 4,
+        unique_logins_last_x_days: 0,
+      },
+      {
+        id: 2,
+        unique_logins_last_x_days: 0,
+      },
+    ];
+    expect(getSortedElems(elems, sortKey, sortDirection)).toEqual(derivedData);
+  });
+
 
   it('getElems() -> Fetching complete', () => {
     const stateElems = {
