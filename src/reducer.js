@@ -19,6 +19,7 @@ export const initialState = {
   filterValue: '',
   sortKey: null,
   sortDirection: null,
+  expandId: -2, // -2 (not expanded), -1 (all expanded), id (sid of object expanded)
 
   pagination: {}, // If paginated response, pagination info will be stored here
   extraInfo: {}, // If responseElemsKey is specified, any extra response fields will be stored here
