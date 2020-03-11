@@ -757,48 +757,6 @@ describe('selectors -> reduxBaseElem', () => {
     expect(getElems(stateElems)).toEqual(derivedData);
   });
 
-  it('getElems() -> Fetching complete and sort provided', () => {
-    const stateElems = {
-      isFetching: false,
-      didInvalidate: false,
-      lastUpdated: Date.now(),
-      elems: [
-        {
-          id: 1,
-          title: 'Zed',
-        },
-        {
-          id: 2,
-          title: 'Alpha',
-        },
-        {
-          id: 3,
-          title: 'Mike',
-        },
-      ],
-      filterValue: '',
-      sortKey: null,
-      sortDirection: null,
-    };
-    const sortKey = 'title';
-    const sortDirection = 'asc';
-    const derivedData = [
-      {
-        id: 2,
-        title: 'Alpha',
-      },
-      {
-        id: 3,
-        title: 'Mike',
-      },
-      {
-        id: 1,
-        title: 'Zed',
-      },
-    ];
-    expect(getElems(stateElems, sortKey, sortDirection)).toEqual(derivedData);
-  });
-
   it('getElems() -> Fetching complete, filter applied', () => {
     const stateElems = {
       isFetching: false,

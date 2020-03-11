@@ -109,7 +109,7 @@ const getSortedElems = (elems, sortKey, sortDirection) => {
 /*
  * Return all the elements taking into account the filter and sort that could be applied.
  */
-export const getElems = (stateElems, sortKey = null, sortDirection = null) => {
+export const getElems = (stateElems) => {
   let elems = [];
   if (upToDate(stateElems)) {
     elems = stateElems.elems.slice();
@@ -117,12 +117,8 @@ export const getElems = (stateElems, sortKey = null, sortDirection = null) => {
     const { filterValue } = stateElems;
     elems = getFilteredElems(elems, filterValue);
 
-    if (sortKey !== null && sortDirection !== null) {
-      elems = getSortedElems(elems, sortKey, sortDirection);
-    } else {
-      // TODO: we are possibly removing the sortKey in state functionality
-      elems = getSortedElems(elems, stateElems.sortKey, stateElems.sortDirection);
-    }
+    const { sortKey, sortDirection } = stateElems;
+    elems = getSortedElems(elems, sortKey, sortDirection);
   }
   return elems;
 };
