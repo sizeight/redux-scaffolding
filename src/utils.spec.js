@@ -2,7 +2,10 @@ import expect from 'expect';
 import nock from 'nock';
 
 import {
-  fetchingComplete, upToDate, shouldFetch, fetchCheckAndParse,
+  fetchingComplete,
+  upToDate,
+  shouldFetch,
+  fetchCheckAndParse,
 } from './utils';
 
 

@@ -5,10 +5,20 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 
 import {
-  fetchBusy, fetchSuccess, fetchFailure, fetchElems, resetState,
-  setUpdateId, updateSuccess, createUpdateElem, setUpdateBusyId,
-  deleteElem, setDeleteBusyId,
-  setFilterValue, setSortKey, setExpandId,
+  fetchBusy,
+  fetchSuccess,
+  fetchFailure,
+  fetchElems,
+  resetState,
+  setUpdateId,
+  updateSuccess,
+  createUpdateElem,
+  setUpdateBusyId,
+  deleteElem,
+  setDeleteBusyId,
+  setFilterValue,
+  setSortKey,
+  setExpandId,
 } from './actions';
 
 

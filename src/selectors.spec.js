@@ -2,10 +2,23 @@ import expect from 'expect';
 import rewire from 'rewire';
 
 import {
-  getStateElems, getUpdateElemId, getFilterValue, getFetchingComplete, getUpToDate, getElems,
-  getAllElems, getElemToUpdate, getUpdateBusyIds, getDeleteBusyIds, getSortKey, getExpandId,
+  getStateElems,
+  getUpdateElemId,
+  getFilterValue,
+  getFetchingComplete,
+  getUpToDate,
+  getElems,
+  getAllElems,
+  getElemToUpdate,
+  getUpdateBusyIds,
+  getDeleteBusyIds,
+  getSortKey,
+  getExpandId,
   getSortDirection,
-  getPagination, getExtraInfo, getTotalElemCount, getFilteredElemCount,
+  getPagination,
+  getExtraInfo,
+  getTotalElemCount,
+  getFilteredElemCount,
 } from './selectors';
 
 // Selector functions not exported need to be rewired to test
