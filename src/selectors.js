@@ -12,6 +12,7 @@ export const getDeleteBusyIds = (nameSpace, state) => state[nameSpace].deleteBus
 export const getFilterValue = (nameSpace, state) => state[nameSpace].filterValue;
 export const getSortKey = (nameSpace, state) => state[nameSpace].sortKey;
 export const getSortDirection = (nameSpace, state) => state[nameSpace].sortDirection;
+export const getExpandId = (nameSpace, state) => state[nameSpace].expandId;
 export const getPagination = (nameSpace, state) => state[nameSpace].pagination;
 export const getExtraInfo = (nameSpace, state) => state[nameSpace].extraInfo;
 

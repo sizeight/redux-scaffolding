@@ -214,3 +214,9 @@ export const setSortKey = (nameSpace, sortKey) => ({
   type: `${nameSpace}${t.SET_SORT_KEY}`,
   sortKey,
 });
+
+// Expanding -2 (none expanded), -1 (all expanded), id (specific obj expanded)
+export const setExpandId = (nameSpace, expandId = -1) => ({
+  type: `${nameSpace}${t.SET_EXPAND_ID}`,
+  expandId,
+});

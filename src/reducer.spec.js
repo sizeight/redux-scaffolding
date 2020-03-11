@@ -1144,4 +1144,80 @@ describe('reducer -> reduxBaseElem', () => {
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
+
+
+  it(`should handle ${nameSpace}/SET_EXPAND_ID -> 1, from all collapsed to 1 expanded`, () => {
+    const action = {
+      type: 'websites/SET_EXPAND_ID',
+      expandId: 1,
+    };
+    const stateBefore = {
+      expandId: -2,
+    };
+    const stateAfter = {
+      expandId: 1,
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/SET_EXPAND_ID -> 1, from 1 expanded to all collapsed`, () => {
+    const action = {
+      type: 'websites/SET_EXPAND_ID',
+      expandId: 1,
+    };
+    const stateBefore = {
+      expandId: -1,
+    };
+    const stateAfter = {
+      expandId: 1,
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/SET_EXPAND_ID -> 1, from all expanded to 1 expanded`, () => {
+    const action = {
+      type: 'websites/SET_EXPAND_ID',
+      expandId: 1,
+    };
+    const stateBefore = {
+      expandId: 1,
+    };
+    const stateAfter = {
+      expandId: -2,
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/SET_EXPAND_ID -> from all expanded to all collapsed`, () => {
+    const action = {
+      type: 'websites/SET_EXPAND_ID',
+      expandId: -1,
+    };
+    const stateBefore = {
+      expandId: -1,
+    };
+    const stateAfter = {
+      expandId: -2,
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it(`should handle ${nameSpace}/SET_EXPAND_ID -> from all collapsed to all expanded`, () => {
+    const action = {
+      type: 'websites/SET_EXPAND_ID',
+      expandId: -1,
+    };
+    const stateBefore = {
+      expandId: -2,
+    };
+    const stateAfter = {
+      expandId: -1,
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
 });

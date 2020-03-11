@@ -8,7 +8,7 @@ import {
   fetchBusy, fetchSuccess, fetchFailure, fetchElems, resetState,
   setUpdateId, updateSuccess, createUpdateElem, setUpdateBusyId,
   deleteElem, setDeleteBusyId,
-  setFilterValue, setSortKey,
+  setFilterValue, setSortKey, setExpandId,
 } from './actions';
 
 
@@ -681,5 +681,14 @@ describe('actions -> reduxBaseElem', () => {
       sortKey,
     };
     expect(setSortKey(nameSpace, sortKey)).toEqual(expectedAction);
+  });
+
+  it('setExpandId() -> 1', () => {
+    const expandId = 1;
+    const expectedAction = {
+      type: 'websites/SET_EXPAND_ID',
+      expandId,
+    };
+    expect(setExpandId(nameSpace, expandId)).toEqual(expectedAction);
   });
 });

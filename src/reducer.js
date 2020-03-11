@@ -334,6 +334,19 @@ export const elems = (nameSpace, state = initialState, action) => {
         sortDirection: newSortDirection,
       };
     }
+
+    case `${nameSpace}${t.SET_EXPAND_ID}`: {
+      let newExpandId = action.expandId;
+      if (state.expandId === newExpandId) {
+        newExpandId = -2;
+      }
+
+      return {
+        ...state,
+        expandId: newExpandId,
+      };
+    }
+
     default:
       return state;
   }

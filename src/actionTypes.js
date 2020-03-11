@@ -12,3 +12,4 @@ export const SET_DELETE_BUSY_ID = '/SET_DELETE_BUSY_ID';
 
 export const SET_FILTER_VALUE = '/SET_FILTER_VALUE';
 export const SET_SORT_KEY = '/SET_SORT_KEY';
+export const SET_EXPAND_ID = '/SET_EXPAND_ID';
