@@ -1,6 +1,6 @@
 {
   "name": "redux-scaffolding",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Reusable Redux actions, reducers and selectors",
   "license": "MIT",
   "repository": "sizeight/redux-scaffolding",
