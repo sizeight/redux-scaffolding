@@ -16,10 +16,11 @@ export const initialState = {
   responseElemsKey: undefined, // Optional, compulsory if pagination is used
 
   updateId: -1, // id for which to show update form
+  deleteId: -2, // -2 (none), -1 (all), id (id of object to be deleted)
   filterValue: '',
   sortKey: null,
   sortDirection: null,
-  expandId: -2, // -2 (not expanded), -1 (all expanded), id (sid of object expanded)
+  expandId: -2, // -2 (not expanded), -1 (all expanded), id (id of object expanded)
 
   pagination: {}, // If paginated response, pagination info will be stored here
   extraInfo: {}, // If responseElemsKey is specified, any extra response fields will be stored here
@@ -289,6 +290,14 @@ export const elems = (nameSpace, state = initialState, action) => {
           ...state.updateBusyIds.slice(0, idx),
           ...state.updateBusyIds.slice(idx + 1),
         ],
+      };
+    }
+
+
+    case `${nameSpace}${t.SET_DELETE_ID}`: {
+      return {
+        ...state,
+        deleteId: action.id,
       };
     }
     case `${nameSpace}${t.SET_DELETE_BUSY_ID}`: {

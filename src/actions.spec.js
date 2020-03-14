@@ -14,6 +14,7 @@ import {
   updateSuccess,
   createUpdateElem,
   setUpdateBusyId,
+  setDeleteId,
   deleteElem,
   setDeleteBusyId,
   setFilterValue,
@@ -643,6 +644,23 @@ describe('actions -> reduxBaseElem', () => {
     expect(updateSuccess(nameSpace, id)).toEqual(expectedAction);
   });
 
+
+  it('setDeleteId() -> 15', () => {
+    const id = 15;
+    const expectedAction = {
+      type: 'websites/SET_DELETE_ID',
+      id,
+    };
+    expect(setDeleteId(nameSpace, id)).toEqual(expectedAction);
+  });
+
+  it('setDeleateId() -> not specified', () => {
+    const expectedAction = {
+      type: 'websites/SET_DELETE_ID',
+      id: -2,
+    };
+    expect(setDeleteId(nameSpace)).toEqual(expectedAction);
+  });
 
   it('setDeleteBusyId() -> true', () => {
     const id = 15;

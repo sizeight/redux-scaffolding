@@ -11,6 +11,7 @@ import {
   getAllElems,
   getElemToUpdate,
   getUpdateBusyIds,
+  getDeleteId,
   getDeleteBusyIds,
   getSortKey,
   getExpandId,
@@ -95,6 +96,27 @@ describe('selectors -> reduxBaseElem', () => {
     };
     const derivedData = [6];
     expect(getUpdateBusyIds(nameSpace, state)).toEqual(derivedData);
+  });
+
+  it('getDeleteId()', () => {
+    const state = {
+      posts: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        posts: [],
+        deleteId: 2,
+      },
+      websites: {
+        isFetching: false,
+        didInvalidate: false,
+        lastUpdated: Date.now(),
+        websites: [],
+        deleteId: -2,
+      },
+    };
+    const derivedData = 2;
+    expect(getDeleteId(nameSpace, state)).toEqual(derivedData);
   });
 
   it('getDeleteBusyIds()', () => {

@@ -167,6 +167,12 @@ export const createUpdateElem = (nameSpace, apiURL, data, id = -1) => {
   };
 };
 
+// Updating
+export const setDeleteId = (nameSpace, id = -2) => ({
+  type: `${nameSpace}${t.SET_DELETE_ID}`,
+  id,
+});
+
 export const setDeleteBusyId = (nameSpace, id, busy) => ({
   type: `${nameSpace}${t.SET_DELETE_BUSY_ID}`,
   id,

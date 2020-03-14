@@ -8,6 +8,7 @@ export const getStateElems = (nameSpace, state) => state[nameSpace];
 export const getDidInvalidate = (nameSpace, state) => state[nameSpace].didInvalidate;
 export const getUpdateElemId = (nameSpace, state) => state[nameSpace].updateId;
 export const getUpdateBusyIds = (nameSpace, state) => state[nameSpace].updateBusyIds;
+export const getDeleteId = (nameSpace, state) => state[nameSpace].deleteId;
 export const getDeleteBusyIds = (nameSpace, state) => state[nameSpace].deleteBusyIds;
 export const getFilterValue = (nameSpace, state) => state[nameSpace].filterValue;
 export const getSortKey = (nameSpace, state) => state[nameSpace].sortKey;

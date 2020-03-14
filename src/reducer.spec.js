@@ -18,6 +18,7 @@ describe('reducer -> reduxBaseElem', () => {
       filterOnFields: [],
       responseElemsKey: undefined,
       updateId: -1,
+      deleteId: -2,
       filterValue: '',
       sortKey: null,
       sortDirection: null,
@@ -777,7 +778,8 @@ describe('reducer -> reduxBaseElem', () => {
       ],
       filterOnFields: [],
       responseElemsKey: undefined,
-      updateId: -1,
+      updateId: 3,
+      deletId: 9,
       filterValue: 'alpha',
       sortKey: null,
       sortDirection: null,
@@ -795,6 +797,7 @@ describe('reducer -> reduxBaseElem', () => {
       filterOnFields: [],
       responseElemsKey: undefined,
       updateId: -1,
+      deleteId: -2,
       filterValue: '',
       sortKey: null,
       sortDirection: null,
@@ -808,7 +811,7 @@ describe('reducer -> reduxBaseElem', () => {
   });
 
 
-  it(`should handle ${nameSpace}/SET_UPDATE_ID -> true`, () => {
+  it(`should handle ${nameSpace}/SET_UPDATE_ID`, () => {
     const action = {
       type: 'websites/SET_UPDATE_ID',
       id: 15,
@@ -818,21 +821,6 @@ describe('reducer -> reduxBaseElem', () => {
     };
     const stateAfter = {
       updateId: 15,
-    };
-    deepFreeze(stateBefore);
-    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
-  });
-
-  it(`should handle ${nameSpace}/SET_UPDATE_ID -> false`, () => {
-    const action = {
-      type: 'websites/SET_UPDATE_ID',
-      id: -1,
-    };
-    const stateBefore = {
-      updateId: 15,
-    };
-    const stateAfter = {
-      updateId: -1,
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
@@ -1025,6 +1013,22 @@ describe('reducer -> reduxBaseElem', () => {
     };
     const stateAfter = {
       updateBusyIds: [9, 8],
+    };
+    deepFreeze(stateBefore);
+    expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
+  });
+
+
+  it(`should handle ${nameSpace}/SET_DELETE_ID`, () => {
+    const action = {
+      type: 'websites/SET_DELETE_ID',
+      id: 15,
+    };
+    const stateBefore = {
+      deleteId: -1,
+    };
+    const stateAfter = {
+      deleteId: 15,
     };
     deepFreeze(stateBefore);
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
