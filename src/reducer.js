@@ -1,6 +1,5 @@
 import * as t from './actionTypes';
 
-
 /*
  * filterOnFields:    Optional, use to specify object fields that reducer should "lowercase concat"
  *                    into one filter string
@@ -39,7 +38,6 @@ function getFilterString(filterOnFields, elem) {
     return elem[filterKey].toLowerCase();
   }).join(' ');
 }
-
 
 const pagination = (nameSpace, state, action) => {
   switch (action.type) {
@@ -199,7 +197,6 @@ export const elems = (nameSpace, state = initialState, action) => {
         responseElems = [action.elems];
       }
 
-
       const newElems = responseElems.map((elem) => {
         return {
           ...elem,
@@ -227,10 +224,8 @@ export const elems = (nameSpace, state = initialState, action) => {
         didInvalidate: true,
       };
 
-
     case `${nameSpace}${t.RESET_STATE}`:
       return initialState;
-
 
     case `${nameSpace}${t.SET_UPDATE_ID}`: {
       return {
@@ -292,7 +287,6 @@ export const elems = (nameSpace, state = initialState, action) => {
         ],
       };
     }
-
 
     case `${nameSpace}${t.SET_DELETE_ID}`: {
       return {

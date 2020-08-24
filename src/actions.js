@@ -6,7 +6,6 @@ import {
 
 import * as t from './actionTypes';
 
-
 // Fetching
 export const fetchBusy = (nameSpace) => ({
   type: `${nameSpace}${t.FETCH_BUSY}`, // e.g. tags/FETCH_BUSY
@@ -207,7 +206,6 @@ export const deleteElem = (nameSpace, apiURL, id) => {
       );
   };
 };
-
 
 // Filtering
 export const setFilterValue = (nameSpace, value = '') => ({

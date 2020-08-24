@@ -81,7 +81,6 @@ export const parseJSON = (response) => {
     });
 };
 
-
 /*
  * Return true if fetching is complete and a valid elems in store.
  */
@@ -105,7 +104,6 @@ export function upToDateButFetching(obj) {
     && obj.lastUpdated !== undefined;
 }
 */
-
 
 /*
  * Return a boolean indicating whether an object has to be fetched.

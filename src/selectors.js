@@ -3,7 +3,6 @@
  */
 import { fetchingComplete, upToDate } from './utils';
 
-
 export const getStateElems = (nameSpace, state) => state[nameSpace];
 export const getDidInvalidate = (nameSpace, state) => state[nameSpace].didInvalidate;
 export const getUpdateElemId = (nameSpace, state) => state[nameSpace].updateId;
@@ -33,7 +32,6 @@ const getFilteredElems = (elems, filterValue) => {
   return filteredElems;
 };
 
-
 const propExists = (obj, sortKeys) => {
   return !!sortKeys.split('__').reduce(
     (ob, sortKey) => {
@@ -60,7 +58,6 @@ const propValue = (obj, sortKeys) => {
   );
   return value;
 };
-
 
 /*
  * If descending or ascending sort required, return sorted elements else just return elems.

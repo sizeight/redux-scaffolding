@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import './Loading.css';
 
-
 const propTypes = {
   animate: PropTypes.bool,
   size: PropTypes.oneOf(['1x', '2x', '3x']),
