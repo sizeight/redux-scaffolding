@@ -43,7 +43,7 @@
     "eslint-plugin-react": "^7.19.0",
     "expect": "^26.4.2",
     "isomorphic-fetch": "^2.2.1",
-    "jsdom": "^16.2.1",
+    "jsdom": "^16.4.0",
     "mocha": "^7.1.0",
     "nock": "^12.0.2",
     "redux": "^4.0.5",
