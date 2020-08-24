@@ -51,8 +51,8 @@
     "redux-thunk": "^2.3.0",
     "rewire": "^5.0.0",
     "style-loader": "^1.2.1",
-    "webpack": "^4.42.0",
-    "webpack-bundle-analyzer": "^3.6.1",
-    "webpack-cli": "^3.3.11"
+    "webpack": "^4.44.1",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.12"
   }
 }
