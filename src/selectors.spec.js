@@ -3,7 +3,7 @@ import rewire from 'rewire';
 
 import {
   getStateElems,
-  getUpdateElemId,
+  getUpdateId,
   getFilterValue,
   getFetchingComplete,
   getUpToDate,
@@ -54,7 +54,7 @@ describe('selectors -> reduxBaseElem', () => {
     expect(getStateElems(nameSpace, state)).toEqual(derivedData);
   });
 
-  it('getUpdateElemId()', () => {
+  it('getUpdateId()', () => {
     const state = {
       posts: {
         isFetching: false,
@@ -72,7 +72,7 @@ describe('selectors -> reduxBaseElem', () => {
       },
     };
     const derivedData = 2;
-    expect(getUpdateElemId(nameSpace, state)).toEqual(derivedData);
+    expect(getUpdateId(nameSpace, state)).toEqual(derivedData);
   });
 
   it('getUpdateBusyIds()', () => {
