@@ -14,7 +14,7 @@ export const initialState = {
   filterOnFields: [], // Optional
   responseElemsKey: undefined, // Optional, compulsory if pagination is used
 
-  updateId: -1, // id for which to show update form
+  updateId: -2, // -1 (none), -1 (new), id (id of object to be updated)
   deleteId: -2, // -2 (none), -1 (all), id (id of object to be deleted)
   filterValue: '',
   sortKey: null,

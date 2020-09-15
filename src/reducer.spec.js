@@ -3,7 +3,6 @@ import deepFreeze from 'deep-freeze';
 
 import { elems as reducer } from './reducer';
 
-
 const nameSpace = 'websites';
 
 describe('reducer -> reduxBaseElem', () => {
@@ -17,7 +16,7 @@ describe('reducer -> reduxBaseElem', () => {
       elems: [],
       filterOnFields: [],
       responseElemsKey: undefined,
-      updateId: -1,
+      updateId: -2,
       deleteId: -2,
       filterValue: '',
       sortKey: null,
@@ -45,7 +44,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // FETCH_SUCCESS
   it(`should handle ${nameSpace}/FETCH_SUCCESS`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
@@ -507,7 +506,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // FETCH_SUCCESS append = true
   it(`should handle ${nameSpace}/FETCH_SUCCESS -> append = true`, () => {
     const action = {
       type: 'websites/FETCH_SUCCESS',
@@ -746,7 +745,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // FETCH_FAILURE
   it(`should handle ${nameSpace}/FETCH_FAILURE`, () => {
     const action = {
       type: 'websites/FETCH_FAILURE',
@@ -763,7 +762,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // RESET STATE
   it(`should handle ${nameSpace}/RESET_STATE`, () => {
     const action = {
       type: 'websites/RESET_STATE',
@@ -796,7 +795,7 @@ describe('reducer -> reduxBaseElem', () => {
       elems: [],
       filterOnFields: [],
       responseElemsKey: undefined,
-      updateId: -1,
+      updateId: -2,
       deleteId: -2,
       filterValue: '',
       sortKey: null,
@@ -810,7 +809,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_UPDATE_ID
   it(`should handle ${nameSpace}/SET_UPDATE_ID`, () => {
     const action = {
       type: 'websites/SET_UPDATE_ID',
@@ -826,7 +825,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // UPDATE_SUCCESS
   it(`should handle ${nameSpace}/UPDATE_SUCCESS -> CREATE`, () => {
     const action = {
       type: 'websites/UPDATE_SUCCESS',
@@ -985,7 +984,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_UPDATE_BUSY_ID
   it(`should handle ${nameSpace}/SET_UPDATE_BUSY_ID -> true`, () => {
     const action = {
       type: 'websites/SET_UPDATE_BUSY_ID',
@@ -1018,7 +1017,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_DELETE_ID
   it(`should handle ${nameSpace}/SET_DELETE_ID`, () => {
     const action = {
       type: 'websites/SET_DELETE_ID',
@@ -1034,7 +1033,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_DELETE_BUSY_ID
   it(`should handle ${nameSpace}/SET_DELETE_BUSY_ID -> true`, () => {
     const action = {
       type: 'websites/SET_DELETE_BUSY_ID',
@@ -1067,7 +1066,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_FILTER_VALUE
   it(`should handle ${nameSpace}/SET_FILTER_VALUE -> Lorem ipsum`, () => {
     const action = {
       type: 'websites/SET_FILTER_VALUE',
@@ -1083,7 +1082,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_SORT_KEY
   it(`should handle ${nameSpace}/SET_SORT_KEY -> null => title, null => asc`, () => {
     const action = {
       type: 'websites/SET_SORT_KEY',
@@ -1152,7 +1151,7 @@ describe('reducer -> reduxBaseElem', () => {
     expect(reducer(nameSpace, stateBefore, action)).toEqual(stateAfter);
   });
 
-
+  // SET_EXPANDID
   it(`should handle ${nameSpace}/SET_EXPAND_ID -> 1, from all collapsed to 1 expanded`, () => {
     const action = {
       type: 'websites/SET_EXPAND_ID',
