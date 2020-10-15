@@ -503,6 +503,64 @@ describe('actions -> reduxBaseElem (async)', () => {
       });
   });
 
+  it('deleteElem() -> With queryParams, Success', () => {
+    const id = 15;
+    const queryParams = { status: 'c' };
+    const apiWithIdAndQueryParams = `${apiPath}${id}/?status=c`;
+    nock(apiHostname)
+      .delete(apiWithIdAndQueryParams)
+      .reply(204);
+
+    const expectedActions = [
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
+        type: 'websites/UPDATE_SUCCESS',
+        id: 15,
+        elem: undefined,
+      },
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: false,
+      },
+    ];
+    const store = mockStore({});
+    return store.dispatch(deleteElem(nameSpace, apiURL, 15, { queryParams }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
+  it('deleteElem() -> With queryParams, Failure', () => {
+    const id = 15;
+    const queryParams = { status: 'c' };
+    const apiWithIdAndQueryParams = `${apiPath}${id}/?status=c`;
+    nock(apiHostname)
+      .delete(apiWithIdAndQueryParams)
+      .reply(500, {});
+
+    const expectedActions = [
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: true,
+      },
+      {
+        type: 'websites/SET_DELETE_BUSY_ID',
+        id: 15,
+        busy: false,
+      },
+    ];
+    const store = mockStore({});
+    return store.dispatch(deleteElem(nameSpace, apiURL, 15, { queryParams }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
 
   it('deleteElem() -> camelCase nameSPace should be changes to lowercase in API call', () => {
     const camelCaseNameSpace = 'subscriptionTerms';

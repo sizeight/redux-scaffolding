@@ -178,12 +178,23 @@ export const setDeleteBusyId = (nameSpace, id, busy) => ({
   busy,
 });
 
-export const deleteElem = (nameSpace, apiURL, id) => {
-  const apiURLWithId = `${apiURL}${id}/`;
+/*
+ * Delete an element
+ *
+ * apiURL = e.g. http://www.example.com/api/v1/websites/<id>/
+ * qeuryParams = e.g. ?status=c
+ */
+export const deleteElem = (nameSpace, apiURL, id, { queryParams = '' } = {}) => {
+  let queryString = Object.keys(queryParams).map((key) => `${key}=${queryParams[key]}`).join('&');
+  if (queryString) {
+    queryString = `?${queryString}`;
+  }
+
+  const apiURLWithIdAndQueryParams = `${apiURL}${id}/${queryString}`;
 
   return (dispatch) => {
     dispatch(setDeleteBusyId(nameSpace, id, true));
-    return fetch(apiURLWithId, {
+    return fetch(apiURLWithIdAndQueryParams, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
