@@ -12,6 +12,18 @@
     "reselect"
   ],
   "author": "Herman Pretorius (https://github.com/sizeight)",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "ie >= 11",
+      "not dead"
+    ],
+    "development": [
+      ">0.2%",
+      "ie >= 11",
+      "not dead"
+    ]
+  },
   "scripts": {
     "test": "mocha --recursive './src/**/*.spec.js' --require @babel/register --require ./src/setup.js",
     "test:watch": "NODE_PATH=./src/ yarn test --watch",
