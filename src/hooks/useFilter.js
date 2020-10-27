@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 function useFilter(objArr, fields, filterValue) {
   const filteredArr = useMemo(
     () => {
-      // console.log('useFilter', fields, filterValue);
       function getFilterString(filterOnFields, elem) {
         return filterOnFields.map((filterKey) => {
           const arr = filterKey.split('__');
@@ -17,7 +16,6 @@ function useFilter(objArr, fields, filterValue) {
             }
             if (Object.is(arr.length - 1, i)) {
               // execute last item logic
-              console.log(tmp[key]);
               value = tmp[key];
             }
             tmp = { ...tmp[key] };
@@ -26,15 +24,6 @@ function useFilter(objArr, fields, filterValue) {
 
           // TODO: Numbers and dates should be filterable. Test her for type and return as string
           // return value.toString(10).toLowerCase();
-
-          /*
-          const hasKey = Object.prototype.hasOwnProperty.call(elem, filterKey);
-          if (!hasKey) {
-            throw new Error(`Object has no key '${filterKey}'`);
-          }
-
-          return elem[filterKey].toLowerCase();
-          */
         }).join(' ');
       }
 
