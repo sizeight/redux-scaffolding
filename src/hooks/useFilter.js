@@ -20,6 +20,11 @@ function useFilter(objArr, fields, filterValue) {
             }
             tmp = { ...tmp[key] };
           });
+          if (typeof value === 'number') {
+            value = value.toString();
+          } else if (typeof value !== 'string') {
+            value = '';
+          }
           return value.toLowerCase();
 
           // TODO: Numbers and dates should be filterable. Test her for type and return as string
