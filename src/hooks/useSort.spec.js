@@ -69,6 +69,54 @@ describe('hooks -> useSort()', () => {
     expect(typeof result.current.handleSort).toBe('function');
   });
 
+  it("useSort() -> handleSort('age') 1x (number)", () => {
+    const objArr = [
+      {
+        firstName: 'Jerry',
+        lastName: 'Seinfeld',
+        age: 39,
+      },
+      {
+        firstName: 'Cosmo',
+        lastName: 'Kramer',
+        age: 42,
+      },
+      {
+        firstName: 'George',
+        lastName: 'Costanza',
+        age: 40,
+      },
+    ];
+    const sortedArr = [
+      {
+        firstName: 'Jerry',
+        lastName: 'Seinfeld',
+        age: 39,
+      },
+      {
+        firstName: 'George',
+        lastName: 'Costanza',
+        age: 40,
+      },
+      {
+        firstName: 'Cosmo',
+        lastName: 'Kramer',
+        age: 42,
+      },
+    ];
+
+    const { result } = renderHook(() => useSort(objArr));
+
+    act(() => {
+      result.current.handleSort('age');
+    });
+
+    expect(result.current.sortedArr).toEqual(sortedArr);
+    expect(result.current.sortKey).toEqual('age');
+    expect(result.current.sortDirection).toEqual('asc');
+    expect(typeof result.current.handleSort).toBe('function');
+  });
+
   it("useSort() -> handleSort('firstName') 2x", () => {
     const objArr = [
       {
