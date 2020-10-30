@@ -32,6 +32,39 @@ describe('hooks -> useFilter()', () => {
     expect(result.current).toEqual(derivedValue);
   });
 
+  it('useFilter() -> 2 filterFields', () => {
+    const objArr = [
+      {
+        firstName: 'Jerry',
+        lastName: 'Seinfeld',
+      },
+      {
+        firstName: 'Cosmo',
+        lastName: 'Kramer',
+      },
+      {
+        firstName: 'George',
+        lastName: 'Costanza',
+      },
+    ];
+    const fields = ['lastName', 'firstName'];
+    const filterValue = 'Co';
+    const derivedValue = [
+      {
+        firstName: 'Cosmo',
+        lastName: 'Kramer',
+      },
+      {
+        firstName: 'George',
+        lastName: 'Costanza',
+      },
+    ];
+
+    const { result } = renderHook(() => useFilter(objArr, fields, filterValue));
+
+    expect(result.current).toEqual(derivedValue);
+  });
+
   it('useFilter() -> invalid filterFields', () => {
     const objArr = [
       {

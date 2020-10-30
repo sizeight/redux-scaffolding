@@ -41,8 +41,16 @@ describe('hooks -> useSort()', () => {
         firstName: 'George',
         lastName: 'Costanza',
       },
+      {
+        firstName: '',
+        lastName: 'Newman',
+      },
     ];
     const sortedArr = [
+      {
+        firstName: '',
+        lastName: 'Newman',
+      },
       {
         firstName: 'Cosmo',
         lastName: 'Kramer',

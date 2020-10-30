@@ -12,7 +12,7 @@ function useSort(objArr) {
     return !!sortKeys.split('__').reduce(
       (ob, key) => {
         if (ob && Object.prototype.hasOwnProperty.call(ob, key)) {
-          if (ob[key] === undefined || ob[key] === null || ob[key] === 0) {
+          if (ob[key] === undefined || ob[key] === null || ob[key] === 0 || ob[key] === '') {
             // The property exists, but it has a value of undefined or null or 0
             return true;
           }
