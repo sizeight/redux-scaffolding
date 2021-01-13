@@ -57,7 +57,7 @@
     "expect": "^26.6.2",
     "isomorphic-fetch": "^3.0.0",
     "jsdom": "^16.4.0",
-    "mocha": "^8.2.0",
+    "mocha": "^8.2.1",
     "nock": "^13.0.4",
     "react": "^17.0.1",
     "react-test-renderer": "^17.0.1",
