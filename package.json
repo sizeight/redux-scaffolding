@@ -65,9 +65,9 @@
     "redux-thunk": "^2.3.0",
     "rewire": "^5.0.0",
     "style-loader": "^2.0.0",
-    "webpack": "^5.33.2",
-    "webpack-bundle-analyzer": "^4.4.1",
-    "webpack-cli": "^4.6.0"
+    "webpack": "^5.38.1",
+    "webpack-bundle-analyzer": "^4.4.2",
+    "webpack-cli": "^4.7.1"
   },
   "peerDependencies": {}
 }
