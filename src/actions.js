@@ -46,7 +46,8 @@ export const fetchElems = (nameSpace, apiURL, {
     if (doFetch) {
       dispatch(fetchBusy(nameSpace));
       return fetch(apiURLWithQueryParams, {
-        credentials: 'include',
+        // Removed next line. Only applicable if we intend to use cross-origin requests
+        // credentials: 'include',
         headers: {
           Accept: 'application/json',
         },
@@ -142,7 +143,7 @@ export const createUpdateElem = (nameSpace, apiURL, data, id = -1) => {
     }
     return fetch(apiURLWithId, {
       method: isUpdate ? 'PATCH' : 'POST',
-      credentials: 'include',
+      // credentials: 'include',
       headers,
       body,
     })
@@ -196,7 +197,7 @@ export const deleteElem = (nameSpace, apiURL, id, { queryParams = '' } = {}) => 
     dispatch(setDeleteBusyId(nameSpace, id, true));
     return fetch(apiURLWithIdAndQueryParams, {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
