@@ -134,7 +134,8 @@ const pagination = (nameSpace, state, action) => {
         },
         nextQueryParamsString: nextQueryParamsString ? `?${nextQueryParamsString}` : null,
         nextQueryParams,
-        previousQueryParamsString: previousQueryParamsString ? `?${previousQueryParamsString}` : null,
+        previousQueryParamsString: previousQueryParamsString
+          ? `?${previousQueryParamsString}` : null,
         previousQueryParams,
         pageSize,
         pageCount,
@@ -156,7 +157,7 @@ const pagination = (nameSpace, state, action) => {
   }
 };
 
-export const elems = (nameSpace, state = initialState, action) => {
+export const elems = (nameSpace, state = initialState, action = {}) => {
   switch (action.type) {
     case `${nameSpace}${t.FETCH_BUSY}`:
       return {
