@@ -155,7 +155,10 @@ export const createUpdateElem = (nameSpace, apiURL, data, id = -1) => {
           if (isUpdate) {
             dispatch(setUpdateBusyId(nameSpace, id, false));
           }
-          return 'Success';
+          return {
+            status: 'Success',
+            id: jsonResponse.id,
+          };
         },
         (error) => {
           if (isUpdate) {
